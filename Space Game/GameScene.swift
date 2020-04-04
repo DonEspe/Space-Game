@@ -42,8 +42,9 @@ class GameScene: SKScene {
         dirt.setScale(0.3)
         
         let background = SKSpriteNode(imageNamed: "purple")
-        background.size.height = size.height
-        background.size.width = size.width
+        background.size = self.frame.size
+        //background.size.height = size.height
+        //background.size.width = size.width
         background.zPosition = 0
         addChild(background)
         
@@ -195,11 +196,11 @@ class GameScene: SKScene {
             
             let yAdjust = -((abs(i) * 2) + ((i * i) / 4))
             let xPos = i * Int(grass.size.width)
-            
             for j in 0...10
             
             {
-                addLandAtLoc(x: xPos, y: Int(yAdjust - Int(dirt.size.height) * (j + 1)), mapChar: planetMap[displayX][j])
+                let yPos = Int(yAdjust - Int(dirt.size.height) * (j + 1))
+                addLandAtLoc(x: xPos, y: yPos, mapChar: planetMap[displayX][j])
             }
             
         }
@@ -233,6 +234,18 @@ class GameScene: SKScene {
             
             case "d":
                 addLand(x: x, y: y, type: "gravel_stone")
+            
+            case "B":
+                addLand(x: x, y: y, type: "fence_wood")
+            
+            case "r":
+                addLand(x: x, y: y, type: "rock")
+            
+            case "p":
+                addLand(x: x, y: y, type: "tile_grassPurpleLarge")
+            
+            case "!":
+                addLand(x: x, y: y, type: "wingMan1")
             
             default:
             print("undefined")
@@ -269,6 +282,17 @@ class GameScene: SKScene {
                         planetMap[i][j] = " "
                     }
                 }
+                
+                if j == 2 && Int.random(in: 0...100) > 80
+                {
+                    planetMap[i][j] = "r"
+                }
+                
+                if j == 2 && Int.random(in: 0...100) > 90
+                {
+                    planetMap[i][j] = "p"
+                }
+                
                 if i == (planetCircumferance / 2) && j == 2
                 {
                     planetMap[i][j] = "^"
@@ -277,6 +301,11 @@ class GameScene: SKScene {
                 if i == 3 && j == 1
                 {
                     planetMap[i][j] = "u"
+                }
+                
+                if i == 36 && j == 2
+                {
+                    planetMap[i][j] = "!"
                 }
                 
                 if i == 10 && j == 8
@@ -362,15 +391,20 @@ class GameScene: SKScene {
             if (targetNode.name?.description.contains("dirt"))!
             {
                 targetNode.removeFromParent()
+                
+                print("targetNode position: ", targetNode.position.x,", ", targetNode.position.y)
                 print("map location pressed: ", mapLocationPressed(x: touchLocation!.x, y: touchLocation!.y))
-                let mapLocation = mapLocationPressed(x: touchLocation!.x, y: touchLocation!.y)
+                //let mapLocation = mapLocationPressed(x: touchLocation!.x, y: targetNode.position.y)
+                let mapLocation = mapLocationPressed(x: targetNode.position.x, y: touchLocation!.y)
                 print("character at map location is: ", planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY])
+                planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY] = "B"
+                drawPlanetCenteredAt(x: playerPosition.x)
             }
             else
             {
                 if (targetNode.name?.contains("land:"))!
                 {
-                    print("map location pressed: ", mapLocationPressed(x: touchLocation!.x, y: touchLocation!.y))
+                    //  print("map location pressed: ", mapLocationPressed(x: touchLocation!.x, y: touchLocation!.y))
                     let mapLocation = mapLocationPressed(x: touchLocation!.x, y: touchLocation!.y)
                     print("character at map location is: ", planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY])
                 }
@@ -402,15 +436,23 @@ class GameScene: SKScene {
         var useX = (planetCircumferance +  Int(mapCenteredLoc - Int(xAdjustment)))
         
         print("useX before adjustment: ", useX)
-        if useX > planetCircumferance
+        
+        while useX > planetCircumferance
         {
             useX -= planetCircumferance
         }
-        
-        if useX < 0
+//        if useX > planetCircumferance
+//        {
+//            useX -= planetCircumferance
+//        }
+        while useX < 0
         {
             useX += planetCircumferance
         }
+//        if useX < 0
+//        {
+//            useX += planetCircumferance
+//        }
         
       //  let absPart = Double(-(abs(Double(useX)) * 2.0))
 //        var actualY = absPart + (Double((useX * useX)) / 4.0)
@@ -436,12 +478,12 @@ class GameScene: SKScene {
         
         if actualY < 0
         {
-            actualY += 0.5
+            actualY += 0.4
         }
         
         if actualY > 0
         {
-            actualY -= 0.5
+            actualY -= 0.4
         }
         
         if actualY < 0

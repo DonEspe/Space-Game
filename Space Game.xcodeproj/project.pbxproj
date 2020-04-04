@@ -23,6 +23,10 @@
 		FE2F435E2437A8A3008C04E9 /* playerShip1_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F435D2437A8A2008C04E9 /* playerShip1_blue.png */; };
 		FE2F43602437AA34008C04E9 /* ufoGreen.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F435F2437AA33008C04E9 /* ufoGreen.png */; };
 		FE2F43622437AAEF008C04E9 /* gravel_stone.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43612437AAEE008C04E9 /* gravel_stone.png */; };
+		FE2F436424383B92008C04E9 /* fence_wood.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F436324383B91008C04E9 /* fence_wood.png */; };
+		FE2F43662438441D008C04E9 /* rock.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43652438441D008C04E9 /* rock.png */; };
+		FE2F436E24384788008C04E9 /* tile_grassPurpleLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F436D24384788008C04E9 /* tile_grassPurpleLarge.png */; };
+		FE2F4370243847F3008C04E9 /* wingMan1.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F436F243847F2008C04E9 /* wingMan1.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +49,10 @@
 		FE2F435D2437A8A2008C04E9 /* playerShip1_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playerShip1_blue.png; sourceTree = "<group>"; };
 		FE2F435F2437AA33008C04E9 /* ufoGreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ufoGreen.png; sourceTree = "<group>"; };
 		FE2F43612437AAEE008C04E9 /* gravel_stone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gravel_stone.png; sourceTree = "<group>"; };
+		FE2F436324383B91008C04E9 /* fence_wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fence_wood.png; sourceTree = "<group>"; };
+		FE2F43652438441D008C04E9 /* rock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rock.png; sourceTree = "<group>"; };
+		FE2F436D24384788008C04E9 /* tile_grassPurpleLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tile_grassPurpleLarge.png; sourceTree = "<group>"; };
+		FE2F436F243847F2008C04E9 /* wingMan1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wingMan1.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +79,10 @@
 				FE2F435D2437A8A2008C04E9 /* playerShip1_blue.png */,
 				FE2F435F2437AA33008C04E9 /* ufoGreen.png */,
 				FE2F43612437AAEE008C04E9 /* gravel_stone.png */,
+				FE2F436324383B91008C04E9 /* fence_wood.png */,
+				FE2F43652438441D008C04E9 /* rock.png */,
+				FE2F436D24384788008C04E9 /* tile_grassPurpleLarge.png */,
+				FE2F436F243847F2008C04E9 /* wingMan1.png */,
 			);
 			sourceTree = "<group>";
 		};
@@ -157,6 +169,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE2F4370243847F3008C04E9 /* wingMan1.png in Resources */,
+				FE2F436424383B92008C04E9 /* fence_wood.png in Resources */,
 				FE2F43422436B24A008C04E9 /* Main.storyboard in Resources */,
 				FE2F43622437AAEF008C04E9 /* gravel_stone.png in Resources */,
 				FE2F43552436B71C008C04E9 /* star1.png in Resources */,
@@ -167,6 +181,8 @@
 				FE2F43442436B24D008C04E9 /* Assets.xcassets in Resources */,
 				FE2F43572436B865008C04E9 /* purple.png in Resources */,
 				FE2F43592436C441008C04E9 /* gravel_dirt.png in Resources */,
+				FE2F43662438441D008C04E9 /* rock.png in Resources */,
+				FE2F436E24384788008C04E9 /* tile_grassPurpleLarge.png in Resources */,
 				FE2F43472436B24D008C04E9 /* LaunchScreen.storyboard in Resources */,
 				FE2F435E2437A8A3008C04E9 /* playerShip1_blue.png in Resources */,
 				FE2F433B2436B24A008C04E9 /* Actions.sks in Resources */,
