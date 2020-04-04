@@ -15,6 +15,14 @@
 		FE2F43422436B24A008C04E9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43402436B24A008C04E9 /* Main.storyboard */; };
 		FE2F43442436B24D008C04E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43432436B24D008C04E9 /* Assets.xcassets */; };
 		FE2F43472436B24D008C04E9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43452436B24D008C04E9 /* LaunchScreen.storyboard */; };
+		FE2F43532436B3A8008C04E9 /* dirt_grass.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43522436B3A8008C04E9 /* dirt_grass.png */; };
+		FE2F43552436B71C008C04E9 /* star1.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43542436B71C008C04E9 /* star1.png */; };
+		FE2F43572436B865008C04E9 /* purple.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43562436B865008C04E9 /* purple.png */; };
+		FE2F43592436C441008C04E9 /* gravel_dirt.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43582436C440008C04E9 /* gravel_dirt.png */; };
+		FE2F435C243785D9008C04E9 /* dirt_sand.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F435B243785D8008C04E9 /* dirt_sand.png */; };
+		FE2F435E2437A8A3008C04E9 /* playerShip1_blue.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F435D2437A8A2008C04E9 /* playerShip1_blue.png */; };
+		FE2F43602437AA34008C04E9 /* ufoGreen.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F435F2437AA33008C04E9 /* ufoGreen.png */; };
+		FE2F43622437AAEF008C04E9 /* gravel_stone.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43612437AAEE008C04E9 /* gravel_stone.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +36,15 @@
 		FE2F43432436B24D008C04E9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FE2F43462436B24D008C04E9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FE2F43482436B24D008C04E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FE2F43522436B3A8008C04E9 /* dirt_grass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dirt_grass.png; sourceTree = "<group>"; };
+		FE2F43542436B71C008C04E9 /* star1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = star1.png; sourceTree = "<group>"; };
+		FE2F43562436B865008C04E9 /* purple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = purple.png; sourceTree = "<group>"; };
+		FE2F43582436C440008C04E9 /* gravel_dirt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gravel_dirt.png; sourceTree = "<group>"; };
+		FE2F435A2436D538008C04E9 /* Space Game.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Space Game.entitlements"; sourceTree = "<group>"; };
+		FE2F435B243785D8008C04E9 /* dirt_sand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dirt_sand.png; sourceTree = "<group>"; };
+		FE2F435D2437A8A2008C04E9 /* playerShip1_blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = playerShip1_blue.png; sourceTree = "<group>"; };
+		FE2F435F2437AA33008C04E9 /* ufoGreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ufoGreen.png; sourceTree = "<group>"; };
+		FE2F43612437AAEE008C04E9 /* gravel_stone.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gravel_stone.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -46,6 +63,14 @@
 			children = (
 				FE2F43352436B24A008C04E9 /* Space Game */,
 				FE2F43342436B24A008C04E9 /* Products */,
+				FE2F43522436B3A8008C04E9 /* dirt_grass.png */,
+				FE2F43542436B71C008C04E9 /* star1.png */,
+				FE2F43562436B865008C04E9 /* purple.png */,
+				FE2F43582436C440008C04E9 /* gravel_dirt.png */,
+				FE2F435B243785D8008C04E9 /* dirt_sand.png */,
+				FE2F435D2437A8A2008C04E9 /* playerShip1_blue.png */,
+				FE2F435F2437AA33008C04E9 /* ufoGreen.png */,
+				FE2F43612437AAEE008C04E9 /* gravel_stone.png */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,6 +85,7 @@
 		FE2F43352436B24A008C04E9 /* Space Game */ = {
 			isa = PBXGroup;
 			children = (
+				FE2F435A2436D538008C04E9 /* Space Game.entitlements */,
 				FE2F43362436B24A008C04E9 /* AppDelegate.swift */,
 				FE2F43382436B24A008C04E9 /* GameScene.sks */,
 				FE2F433A2436B24A008C04E9 /* Actions.sks */,
@@ -132,9 +158,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE2F43422436B24A008C04E9 /* Main.storyboard in Resources */,
+				FE2F43622437AAEF008C04E9 /* gravel_stone.png in Resources */,
+				FE2F43552436B71C008C04E9 /* star1.png in Resources */,
+				FE2F43602437AA34008C04E9 /* ufoGreen.png in Resources */,
 				FE2F43392436B24A008C04E9 /* GameScene.sks in Resources */,
+				FE2F43532436B3A8008C04E9 /* dirt_grass.png in Resources */,
+				FE2F435C243785D9008C04E9 /* dirt_sand.png in Resources */,
 				FE2F43442436B24D008C04E9 /* Assets.xcassets in Resources */,
+				FE2F43572436B865008C04E9 /* purple.png in Resources */,
+				FE2F43592436C441008C04E9 /* gravel_dirt.png in Resources */,
 				FE2F43472436B24D008C04E9 /* LaunchScreen.storyboard in Resources */,
+				FE2F435E2437A8A3008C04E9 /* playerShip1_blue.png in Resources */,
 				FE2F433B2436B24A008C04E9 /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -292,15 +326,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Space Game/Space Game.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2493S56G62;
 				INFOPLIST_FILE = "Space Game/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.duckyplanet.Space-Game";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -310,15 +347,18 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = "Space Game/Space Game.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 2493S56G62;
 				INFOPLIST_FILE = "Space Game/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.duckyplanet.Space-Game";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
