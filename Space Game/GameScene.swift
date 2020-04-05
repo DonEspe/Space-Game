@@ -23,7 +23,9 @@ class GameScene: SKScene {
     
     let canJump = [Character(" "), "r", "p", "^", "B"]
     
-    var mapCenteredLoc = 15
+    var mapCenteredLocX = 15
+    var mapCenteredLocY = 2
+    
     var planetCircumferance = 50
     
     let jumpSound = Sound(name: "jumpSound", type: "mp3")
@@ -52,7 +54,7 @@ class GameScene: SKScene {
    
         addStars()
         buildPlanetMap(planetCircumferance: planetCircumferance)
-        drawPlanetCenteredAt(x: mapCenteredLoc)
+        drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
         printMap()
         
         button = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
@@ -210,24 +212,24 @@ class GameScene: SKScene {
         
     }
     
-    func drawPlanetCenteredAt(x: Int)
+    func drawPlanetCenteredAt(x: Int, y: Int)
     {
         for sprite in spriteList
         {
             sprite.removeFromParent()
         }
         
-        let grass = SKSpriteNode(imageNamed:"dirt_grass")
-        grass.setScale(0.3)
+        let tile = SKSpriteNode(imageNamed:"dirt_grass")
+        tile.setScale(0.3)
         
-        let dirt = SKSpriteNode(imageNamed: "gravel_dirt")
-        dirt.setScale(0.3)
+        //let dirt = SKSpriteNode(imageNamed: "gravel_dirt")
+        //dirt.setScale(0.3)
         
         var displayX:Int
     
         for i in -((displaytileWidth) / 2)...(displaytileWidth / 2)
         {
-            displayX = mapCenteredLoc + i
+            displayX = mapCenteredLocX + i
             if displayX < 0
             {
                 displayX += planetCircumferance + 1
@@ -239,11 +241,12 @@ class GameScene: SKScene {
             }
             
             let yAdjust = -((abs(i) * 2) + ((i * i) / 4))
-            let xPos = i * Int(grass.size.width )
-            for j in 1...displaytileHeight
+            let xPos = i * Int(tile.size.width )
+            for j in 0...displaytileHeight
             
             {
-                let yPos = Int(yAdjust - Int(dirt.size.height  ) * (j + 1))
+                var yPos = Int(yAdjust - Int(tile.size.height  ) * (j + 1))
+                yPos +=  (mapCenteredLocY - 3) * Int(tile.size.height)
                 addLandAtLoc(x: xPos, y: yPos, mapChar: planetMap[displayX][j])
             }
             
@@ -300,7 +303,7 @@ class GameScene: SKScene {
     {
         playerPosition = CGPoint(x: planetCircumferance / 2, y: 2)
         print("building map")
-        mapCenteredLoc = planetCircumferance / 2
+        mapCenteredLocX = planetCircumferance / 2
         for i in 0...planetCircumferance
         {
             for j in 0...10
@@ -392,7 +395,7 @@ class GameScene: SKScene {
     {
         player.xScale = -abs(player.xScale)
         
-        if (player.action(forKey: "falling") != nil)
+        if (player.action(forKey: "falling") != nil)  || (player.action(forKey: "moving") != nil)
         {
             return
         }
@@ -409,7 +412,7 @@ class GameScene: SKScene {
 
     func moveRight()
     {
-        if (player.action(forKey: "falling") != nil)
+       if (player.action(forKey: "falling") != nil)  || (player.action(forKey: "moving") != nil)
         {
             return
         }
@@ -431,26 +434,26 @@ class GameScene: SKScene {
     
     func distanceFromCenter(x: Int, y: Int) -> Int
     {
-        let distance1 = abs(mapCenteredLoc - x)
-        let distance2 = abs(x - (planetCircumferance + 1)  - mapCenteredLoc)
-        let distance3 = abs(x + (planetCircumferance + 1) - mapCenteredLoc)
+        let distance1 = abs(mapCenteredLocX - x)
+        let distance2 = abs(x - (planetCircumferance + 1)  - mapCenteredLocX)
+        let distance3 = abs(x + (planetCircumferance + 1) - mapCenteredLocX)
         
       //  print("d1: ", distance1, ",d2: ", distance2, ",d3: ", distance3)
         var shortestDistance = min(distance1, distance2, distance3)
         
-        if shortestDistance == abs(x - mapCenteredLoc)
+        if shortestDistance == abs(x - mapCenteredLocX)
         {
-            shortestDistance = x - mapCenteredLoc
+            shortestDistance = x - mapCenteredLocX
         }
         
-        if shortestDistance == abs(x - (planetCircumferance + 1) - mapCenteredLoc)
+        if shortestDistance == abs(x - (planetCircumferance + 1) - mapCenteredLocX)
         {
-            shortestDistance = x - (planetCircumferance + 1) - mapCenteredLoc
+            shortestDistance = x - (planetCircumferance + 1) - mapCenteredLocX
         }
         
-        if shortestDistance == abs(x + planetCircumferance + 1 - mapCenteredLoc)
+        if shortestDistance == abs(x + planetCircumferance + 1 - mapCenteredLocX)
         {
-            shortestDistance = x + (planetCircumferance + 1) - mapCenteredLoc
+            shortestDistance = x + (planetCircumferance + 1) - mapCenteredLocX
         }
         
         return shortestDistance
@@ -461,6 +464,7 @@ class GameScene: SKScene {
     
     func movePlayer(tiles: Int)  //positive for right, negative for left
     {
+       
         recentered = false
         playerPosition.x += CGFloat(tiles)
         
@@ -510,19 +514,19 @@ class GameScene: SKScene {
     func moveDisplay(by: Int)
     {
         print("moving by: ", by)
-        mapCenteredLoc += by
+        mapCenteredLocX += by
         
-        if mapCenteredLoc > planetCircumferance
+        if mapCenteredLocX > planetCircumferance
         {
-            mapCenteredLoc -= planetCircumferance
+            mapCenteredLocX -= planetCircumferance
         }
         
-        if mapCenteredLoc < 0
+        if mapCenteredLocX < 0
         {
-            mapCenteredLoc += planetCircumferance
+            mapCenteredLocX += planetCircumferance
         }
         
-        drawPlanetCenteredAt(x: mapCenteredLoc)
+        drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
         placePlayer()
         
         
@@ -531,24 +535,24 @@ class GameScene: SKScene {
     func recenterPlayer()
     {
         print("recentering...")
-        while mapCenteredLoc != Int(playerPosition.x)
+        while mapCenteredLocX != Int(playerPosition.x)
         {
             let moveBy = distanceFromCenter(x: Int(playerPosition.x), y: Int(playerPosition.y)).signum()
             print("adjusting by: ",distanceFromCenter(x: Int(playerPosition.x), y: Int(playerPosition.y)).signum())
-              mapCenteredLoc += moveBy
+              mapCenteredLocX += moveBy
 
-            if mapCenteredLoc > planetCircumferance
+            if mapCenteredLocX > planetCircumferance
             {
-                mapCenteredLoc -= planetCircumferance
+                mapCenteredLocX -= planetCircumferance
             }
 
-            if mapCenteredLoc < 0
+            if mapCenteredLocX < 0
             {
-                mapCenteredLoc += planetCircumferance
+                mapCenteredLocX += planetCircumferance
             }
 
             let delay = SKAction.wait(forDuration: 0.1)
-            let redrawMap = SKAction.run({self.drawPlanetCenteredAt(x: self.mapCenteredLoc)})
+            let redrawMap = SKAction.run({self.drawPlanetCenteredAt(x: self.mapCenteredLocX, y: self.mapCenteredLocY)})
             let drawSequence = SKAction.sequence([delay, redrawMap])
             player.run(drawSequence)
  
@@ -644,7 +648,7 @@ class GameScene: SKScene {
                     print("falling in touch...")
                     moveDown()
                 }
-                drawPlanetCenteredAt(x: Int(playerPosition.x))
+                drawPlanetCenteredAt(x: Int(playerPosition.x), y: Int(playerPosition.y))
             }
             else
             {
@@ -706,15 +710,16 @@ class GameScene: SKScene {
             }
         }
         
+       
     }
     
     func findPositionofMapLocation(x: CGFloat, y: CGFloat) -> CGPoint? //(x: CGFloat, y: CGFloat)?
     {
         
-        var adjustedDisplayX = x - CGFloat(mapCenteredLoc)
+        var adjustedDisplayX = x - CGFloat(mapCenteredLocX)
         
-        var displayMin = mapCenteredLoc - displaytileWidth / 2
-        var displayMax = mapCenteredLoc + displaytileWidth / 2
+        var displayMin = mapCenteredLocX - displaytileWidth / 2
+        var displayMax = mapCenteredLocX + displaytileWidth / 2
         
         if displayMin < 0
         {
@@ -743,22 +748,26 @@ class GameScene: SKScene {
         let tile = SKSpriteNode(imageNamed:"dirt_grass")
         tile.setScale(0.3)
         
+         //yPos +=  (mapCenteredLocY - 3) * Int(tile.size.height)
+        let adjustYForCenter = y - (CGFloat(mapCenteredLocY - 3) * tile.size.height)
+        print("y: ", y, ", adjustedY: ", adjustYForCenter)
+        
         let yAdjust = -((abs(adjustedDisplayX) * 2) + ((adjustedDisplayX * adjustedDisplayX) / 4))
         let xPos = adjustedDisplayX * (tile.size.width)
         
         let yPos = (yAdjust - (tile.size.height) * (CGFloat(y) + 1.0))
     
-        return CGPoint(x: xPos, y: yPos)
+        return CGPoint(x: xPos, y: yPos - adjustYForCenter)
         
     }
     
     
     func mapLocationPressed(x: CGFloat, y: CGFloat) -> (mapLocationX: Int,mapLocationY: Int)
     {
-        let grass = SKSpriteNode(imageNamed:"dirt_grass")
-        grass.setScale(0.3)
+        let tile = SKSpriteNode(imageNamed:"dirt_grass")
+        tile.setScale(0.3)
         
-        var xAdjustment = -(x / grass.size.width)
+        var xAdjustment = -(x / tile.size.width)
         print("unrounded xAdjustment: ", xAdjustment)
         
         if xAdjustment < 0
@@ -770,7 +779,7 @@ class GameScene: SKScene {
             xAdjustment += 0.5
         }
         
-        var useX = (planetCircumferance +  Int(mapCenteredLoc - Int(xAdjustment)))
+        var useX = (planetCircumferance +  Int(mapCenteredLocX - Int(xAdjustment)))
       
         while useX > planetCircumferance
         {
@@ -786,9 +795,11 @@ class GameScene: SKScene {
        
         let doubleX = CGFloat(abs(Double(adjustedi)) * 2.0) + (adjustedi*adjustedi) / 4.0
        
-        let tileHeight = grass.size.height
+        let tileHeight = tile.size.height
         
-        let adjustedY = y + doubleX + tileHeight
+        let adjustYForCenter = (CGFloat(mapCenteredLocY - 3) * tile.size.height)
+        
+        let adjustedY = y + doubleX + tileHeight - adjustYForCenter
         let heightInTiles = -(adjustedY / tileHeight)
         
         var heightAdjustmentForX = CGFloat(abs(useX)*2)
@@ -835,7 +846,7 @@ class GameScene: SKScene {
          {
             counter = 0
             
-            if mapCenteredLoc == Int(playerPosition.x)
+            if mapCenteredLocX == Int(playerPosition.x)
             {
                 recentered = false
             }
