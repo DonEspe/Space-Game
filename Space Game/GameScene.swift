@@ -16,7 +16,13 @@ class GameScene: SKScene {
     
     var planetMap = Array(repeating: Array(repeating: Character("."), count: 20), count: 100)// [[Character]]()
     var playerPosition = CGPoint(x: 25, y: 2)
-    var playerDistanceFromCenter = 0
+//var playerDistanceFromCenter = 0
+    
+    var counter = 0
+    var recentered = false
+    var falling = false
+    
+    let canJump = [Character(" "), "r", "p", "^", "B"]
     
     var mapCenteredLoc = 15
     var planetCircumferance = 50
@@ -72,6 +78,13 @@ class GameScene: SKScene {
         button.name = "jump"
         self.addChild(button)
         
+        button = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
+        // Put it in the center of the scene
+        button.position = CGPoint(x:0, y: 20);
+        button.zPosition = 35
+        button.name = "down"
+        self.addChild(button)
+        
         
         button = SKSpriteNode(color: .red, size: CGSize(width: 100, height: 100))
         // Put it in the center of the scene
@@ -92,15 +105,16 @@ class GameScene: SKScene {
         buildPlayer()
         //animatePlayer()
         player.xScale = -player.xScale
-        if let position = findPositionofMapLocation(x: playerPosition.x , y: playerPosition.y)
-        {
-            player.position.x = position.x
-            player.position.y = position.y
-        }
-        else
-        {
-            print("ERROR placing player!")
-        }
+        placePlayer()
+//        if let position = findPositionofMapLocation(x: playerPosition.x , y: playerPosition.y)
+//        {
+//            player.position.x = position.x
+//            player.position.y = position.y
+//        }
+//        else
+//        {
+//            print("ERROR placing player!")
+//        }
         
         
 //        for i in 0...14
@@ -126,6 +140,20 @@ class GameScene: SKScene {
         //  land.position =  CGPoint(x: -(i * Int(land.size.width)), y: 0) //size.width * 0.1, y: size.height * 0.5)
         //  addChild(land)
         // }
+    }
+    
+    func placePlayer()
+    {
+        if let position = findPositionofMapLocation(x: playerPosition.x , y: playerPosition.y)
+        {
+            player.position.x = position.x
+            player.position.y = position.y
+        }
+        else
+        {
+            print("ERROR placing player!")
+        }
+        
     }
     
     func printMap()
@@ -445,11 +473,40 @@ class GameScene: SKScene {
         
     }
     
+    func distanceFromCenter(x: Int, y: Int) -> Int
+    {
+        let distance1 = abs(mapCenteredLoc - x)
+        let distance2 = abs(x - (planetCircumferance + 1)  - mapCenteredLoc)
+        let distance3 = abs(x + (planetCircumferance + 1) - mapCenteredLoc)
+        
+      //  print("d1: ", distance1, ",d2: ", distance2, ",d3: ", distance3)
+        var shortestDistance = min(distance1, distance2, distance3)
+        
+        if shortestDistance == abs(x - mapCenteredLoc)
+        {
+            shortestDistance = x - mapCenteredLoc
+        }
+        
+        if shortestDistance == abs(x - (planetCircumferance + 1) - mapCenteredLoc)
+        {
+            shortestDistance = x - (planetCircumferance + 1) - mapCenteredLoc
+        }
+        
+        if shortestDistance == abs(x + planetCircumferance + 1 - mapCenteredLoc)
+        {
+            shortestDistance = x + (planetCircumferance + 1) - mapCenteredLoc
+        }
+        
+        return shortestDistance
+        
+        
+        
+    }
+    
     func movePlayer(tiles: Int)  //positive for right, negative for left
     {
-        var recentered = false
-        print("sign of tiles is: ", tiles.signum())
-        playerDistanceFromCenter += tiles
+        recentered = false
+        //playerDistanceFromCenter += tiles
         playerPosition.x += CGFloat(tiles)
         
         if playerPosition.x < 0
@@ -461,29 +518,32 @@ class GameScene: SKScene {
         {
             playerPosition.x -= CGFloat(planetCircumferance + 1)
         }
-        print("after adjustment playerposition.x = ", playerPosition.x)
+      //  print("after adjustment playerposition.x = ", playerPosition.x)
         
         player.xScale = abs(player.xScale) * CGFloat(tiles.signum())
         
         
-        print("player distance from center: ", playerDistanceFromCenter)
+       // print("player distance from center: ", playerDistanceFromCenter)
        // if abs( Int(playerPosition.x) - mapCenteredLoc) > (displaytileWidth / 2) - 2
-        if abs(playerDistanceFromCenter) > (displaytileWidth / 2) - 1
+        if  abs(distanceFromCenter(x: Int(playerPosition.x), y: Int(playerPosition.y))) > (displaytileWidth / 2) - 2 //abs(playerDistanceFromCenter) > (displaytileWidth / 2) - 1
         {
-            mapCenteredLoc = Int(playerPosition.x)
-            playerDistanceFromCenter = 0
             
-            if mapCenteredLoc > planetCircumferance
-            {
-                mapCenteredLoc -= planetCircumferance
-            }
-            
-            if mapCenteredLoc < 0
-            {
-                mapCenteredLoc += planetCircumferance
-            }
-            player.removeAllActions()
-            drawPlanetCenteredAt(x: mapCenteredLoc)
+//            mapCenteredLoc = Int(playerPosition.x)
+//            playerDistanceFromCenter = 0
+//
+//            if mapCenteredLoc > planetCircumferance
+//            {
+//                mapCenteredLoc -= planetCircumferance
+//            }
+//
+//            if mapCenteredLoc < 0
+//            {
+//                mapCenteredLoc += planetCircumferance
+//            }
+//            player.removeAllActions()
+//
+            //recenterPlayer()  //MARK: maybe put back...
+//            drawPlanetCenteredAt(x: mapCenteredLoc)
             recentered = true
         }
         
@@ -500,7 +560,7 @@ class GameScene: SKScene {
 //
             
             
-            print("position: ", position, ", x:", playerPosition.x)
+          //  print("position: ", position, ", x:", playerPosition.x)
             if !recentered && (player.action(forKey: "moving") == nil)
             {
                 let movePlayerAction = SKAction.move(to: position, duration: 0.25)
@@ -517,8 +577,73 @@ class GameScene: SKScene {
                 player.position.y = position.y
             }
             
-            
+         
+            print("distance from center: ", distanceFromCenter(x: Int(playerPosition.x), y: Int(playerPosition.y)))
         }
+        
+        
+//        if canJump.contains(planetMap[Int(playerPosition.x)][Int(playerPosition.y + 1.0)]) // == " "
+//        {
+//            moveDown()
+//        }
+    }
+    
+    func moveDisplay(by: Int)
+    {
+        print("moving by: ", by)
+        mapCenteredLoc += by
+        
+        if mapCenteredLoc > planetCircumferance
+        {
+            mapCenteredLoc -= planetCircumferance
+        }
+        
+        if mapCenteredLoc < 0
+        {
+            mapCenteredLoc += planetCircumferance
+        }
+        
+        drawPlanetCenteredAt(x: mapCenteredLoc)
+        placePlayer()
+        
+        
+    }
+    
+    func recenterPlayer()
+    {
+        print("recentering...")
+        while mapCenteredLoc != Int(playerPosition.x)
+        {
+            let moveBy = distanceFromCenter(x: Int(playerPosition.x), y: Int(playerPosition.y)).signum()
+            print("adjusting by: ",distanceFromCenter(x: Int(playerPosition.x), y: Int(playerPosition.y)).signum())
+              mapCenteredLoc += moveBy
+
+            if mapCenteredLoc > planetCircumferance
+            {
+                mapCenteredLoc -= planetCircumferance
+            }
+
+            if mapCenteredLoc < 0
+            {
+                mapCenteredLoc += planetCircumferance
+            }
+
+            let delay = SKAction.wait(forDuration: 0.1)
+            let redrawMap = SKAction.run({self.drawPlanetCenteredAt(x: self.mapCenteredLoc)})
+           // let moveMap = SKAction.run({self.moveDisplay(by: moveBy)})
+            let drawSequence = SKAction.sequence([delay, redrawMap])
+            player.run(drawSequence)
+ 
+           // drawPlanetCenteredAt(x: mapCenteredLoc)
+        }
+        
+       // mapCenteredLoc = Int(playerPosition.x)
+       // playerDistanceFromCenter = 0
+        
+        
+        
+       // drawPlanetCenteredAt(x: mapCenteredLoc)
+        
         
     }
     
@@ -574,17 +699,41 @@ class GameScene: SKScene {
             }
         
         
-        if targetNode.name == "jump" && player.action(forKey: "jumping") == nil
+        if targetNode.name == "jump" && player.action(forKey: "jumping") == nil && player.action(forKey: "moving") == nil
         {
             print("jump")
+       
+            let currentCharacter = planetMap[Int(playerPosition.x)][Int(playerPosition.y)]
             
-            let jump = SKAction.moveBy(x: 0.0, y: 20.0, duration: 0.25)
-            let jumpTexture = SKTexture(imageNamed: "p1_jump")
-            let land = SKAction.moveBy(x: 0.0, y: -20.0, duration: 0.25)
-            jumpSound.play()
-            player.run(.sequence([.setTexture(SKTexture(imageNamed:"p1_jump")), jump, land]), completion: {self.player.texture = SKTexture(imageNamed: "p1_stand")})//,withKey: "jumping")
+            if canJump.contains(currentCharacter) //currentCharacter == " " || currentCharacter == "r" || currentCharacter == "^" || currentCharacter == "p"
+            {
+                let jump = SKAction.moveBy(x: 0.0, y: 20.0, duration: 0.25)
+                let jumpTexture = SKTexture(imageNamed: "p1_jump")
+                let land = SKAction.moveBy(x: 0.0, y: -20.0, duration: 0.25)
+                jumpSound.play()
+                player.run(.sequence([.setTexture(jumpTexture), jump, land]), completion: {self.player.texture = SKTexture(imageNamed: "p1_stand")})//,withKey: "jumping")
+                
+            }
+            else
+            {
+                playerPosition.y -= 1
+                let position = findPositionofMapLocation(x: CGFloat(playerPosition.x), y: CGFloat(playerPosition.y))!
+                let movePlayerAction = SKAction.move(to: position, duration: 0.25)
+                let animate = SKAction.animate(with: playerWalkingFrames, timePerFrame: 0.1, resize: false, restore: true)
+                player.run(animate, withKey: "walking")
+                player.run(.sequence([movePlayerAction, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "moving")
+                
+            }
             
         }
+        
+        if targetNode.name == "down"
+        {
+            moveDown()
+            
+            print("tapped down!")
+        }
+        
         
         if targetNode.name != nil
         {
@@ -612,6 +761,55 @@ class GameScene: SKScene {
             }
         }
         
+        
+    }
+    
+    func fall()
+    {
+        
+    }
+    
+    func moveDown()
+    {
+        if (player.action(forKey: "moving") != nil)
+        {
+            return
+        }
+        var position = findPositionofMapLocation(x: CGFloat(playerPosition.x), y: CGFloat(playerPosition.y))!
+        let movePlayerActionHorizontal = SKAction.move(to: position, duration: 0.1)
+        
+        playerPosition.y += 1
+        
+        if playerPosition.y > 9 //mapheight
+        {
+            playerPosition.y = 9
+        }
+        
+        position = findPositionofMapLocation(x: CGFloat(playerPosition.x), y: CGFloat(playerPosition.y))!
+        
+        let movePlayerActionVertical = SKAction.move(to: position, duration: 0.15)
+
+        let animate = SKAction.animate(with: playerWalkingFrames, timePerFrame: 0.1, resize: false, restore: true)
+        
+        
+        
+        if falling
+        {
+            if (player.action(forKey: "falling") == nil)
+            {
+                player.run(.sequence([movePlayerActionVertical, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "falling")
+//                player.run(.sequence([movePlayerActionHorizontal, movePlayerActionVertical, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "falling")
+                
+            }
+        }
+        else
+        {
+            if (player.action(forKey: "falling") == nil)
+            {
+                player.run(animate, withKey: "walking")
+                player.run(.sequence([movePlayerActionVertical, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "moving")
+            }
+        }
         
     }
     
@@ -663,8 +861,8 @@ class GameScene: SKScene {
         let xPos = adjustedDisplayX * (tile.size.width)
         
         let yPos = (yAdjust - (tile.size.height) * (CGFloat(y) + 1.0))
-        print("x: ",x,", y:", y)
-        print("xpos, ypos: ", xPos,", ", yPos)
+       // print("x: ",x,", y:", y)
+      //  print("xpos, ypos: ", xPos,", ", yPos)
         
         return CGPoint(x: xPos, y: yPos)
         
@@ -690,7 +888,7 @@ class GameScene: SKScene {
         
         var useX = (planetCircumferance +  Int(mapCenteredLoc - Int(xAdjustment)))
         
-        print("useX before adjustment: ", useX)
+        //print("useX before adjustment: ", useX)
         
         while useX > planetCircumferance
         {
@@ -712,7 +910,7 @@ class GameScene: SKScene {
       //  let absPart = Double(-(abs(Double(useX)) * 2.0))
 //        var actualY = absPart + (Double((useX * useX)) / 4.0)
         let adjustedi = xAdjustment// CGFloat(useX) - CGFloat(planetCircumferance) / 2.0
-        print("adjusted i: ", adjustedi)
+       // print("adjusted i: ", adjustedi)
         let doubleX = CGFloat(abs(Double(adjustedi)) * 2.0) + (adjustedi*adjustedi) / 4.0
        
         let tileHeight = grass.size.height
@@ -720,7 +918,7 @@ class GameScene: SKScene {
         let adjustedY = y + doubleX + tileHeight
         let heightInTiles = -(adjustedY / tileHeight)
         
-        print("height in tiles ", heightInTiles, "at y position: ", y)
+       // print("height in tiles ", heightInTiles, "at y position: ", y)
         
         var heightAdjustmentForX = CGFloat(abs(useX)*2)
         heightAdjustmentForX += CGFloat((useX * useX)) / 4.0
@@ -746,7 +944,7 @@ class GameScene: SKScene {
             actualY = 0
         }
         
-        print("actualX: ",xAdjustment,", actualY: ", actualY)
+       // print("actualX: ",xAdjustment,", actualY: ", actualY)
         
         return  (useX ,Int(actualY) + 1)
         
@@ -759,10 +957,41 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         
+        counter += 1
+        
         if (player.action(forKey: "moving") == nil)
         {
            // player.texture = SKTexture(imageNamed: "p1_stand")
             
+        }
+        
+        let playerDistanceFromCenter = distanceFromCenter(x: Int(playerPosition.x), y: Int(playerPosition.y))
+        if recentered //&& counter > 10 //(abs(playerDistanceFromCenter) > (displaytileWidth / 2)) && counter > 10
+         {
+            counter = 0
+            
+            if mapCenteredLoc == Int(playerPosition.x)
+            {
+                recentered = false
+            }
+            let moveBy = playerDistanceFromCenter.signum()
+            print("adjusting by: ",distanceFromCenter(x: Int(playerPosition.x), y: Int(playerPosition.y)).signum())
+            moveDisplay(by: moveBy)
+          //  mapCenteredLoc += moveBy
+          //  drawPlanetCenteredAt(x: mapCenteredLoc)
+            
+            
+        }
+        
+        if (player.action(forKey: "falling") == nil)
+        {
+            falling = false
+        }
+        
+        if canJump.contains(planetMap[Int(playerPosition.x)][Int(playerPosition.y + 1.0)]) && (player.action(forKey: "falling") == nil) // == " "
+        {
+            falling = true
+            moveDown()
         }
     }
 }
