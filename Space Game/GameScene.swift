@@ -15,13 +15,28 @@ class GameScene: SKScene {
     private var spinnyNode : SKShapeNode?
     
     var planetMap = Array(repeating: Array(repeating: Character("."), count: 20), count: 100)// [[Character]]()
-    var playerPosition = (x: 25, y: 3)
+    var playerPosition = CGPoint(x: 25, y: 2)
+    var playerDistanceFromCenter = 0
+    
     var mapCenteredLoc = 15
     var planetCircumferance = 50
+    
+    let jumpSound = Sound(name: "jumpSound", type: "mp3")
+    
+    
+    let displaytileHeight = 10
+    let displaytileWidth = 28 // will add one for center I believe
     
     var spriteList = [SKSpriteNode]()
     
     var button: SKNode! = nil
+    
+    let playerCategory: UInt32 = 0b001
+    let landCategory: UInt32 = 0b010
+    
+    
+    private var player = SKSpriteNode()
+    private var playerWalkingFrames: [SKTexture] = []
 
     override func didMove(to view: SKView) {
         
@@ -32,9 +47,6 @@ class GameScene: SKScene {
             label.run(SKAction.fadeIn(withDuration: 2.0))
         }
         
-        
-        
-        
         let grass = SKSpriteNode(imageNamed:"dirt_grass")
         grass.setScale(0.3)
         
@@ -43,8 +55,6 @@ class GameScene: SKScene {
         
         let background = SKSpriteNode(imageNamed: "purple")
         background.size = self.frame.size
-        //background.size.height = size.height
-        //background.size.width = size.width
         background.zPosition = 0
         addChild(background)
         
@@ -54,6 +64,14 @@ class GameScene: SKScene {
         buildPlanetMap(planetCircumferance: planetCircumferance)
         drawPlanetCenteredAt(x: mapCenteredLoc)
         printMap()
+        
+        button = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
+        // Put it in the center of the scene
+        button.position = CGPoint(x:0, y: 124);
+        button.zPosition = 35
+        button.name = "jump"
+        self.addChild(button)
+        
         
         button = SKSpriteNode(color: .red, size: CGSize(width: 100, height: 100))
         // Put it in the center of the scene
@@ -70,6 +88,19 @@ class GameScene: SKScene {
         button.name = "left"
         
         self.addChild(button)
+        
+        buildPlayer()
+        //animatePlayer()
+        player.xScale = -player.xScale
+        if let position = findPositionofMapLocation(x: playerPosition.x , y: playerPosition.y)
+        {
+            player.position.x = position.x
+            player.position.y = position.y
+        }
+        else
+        {
+            print("ERROR placing player!")
+        }
         
         
 //        for i in 0...14
@@ -109,14 +140,57 @@ class GameScene: SKScene {
         }
     }
     
+    func buildPlayer()
+    {
+        let playerAnimatedAtlas = SKTextureAtlas(named:"p1_walk")
+        var walkFrames: [SKTexture] = []
+        
+        let numImages = playerAnimatedAtlas.textureNames.count
+        for i in 1...numImages
+        {
+            var playerTextureName = "p1_walk0\(i)"
+            
+            if i >= 10
+            {
+                playerTextureName = "p1_walk\(i)"
+            }
+            
+            walkFrames.append(playerAnimatedAtlas.textureNamed(playerTextureName))
+        }
+        playerWalkingFrames = walkFrames
+        
+        let firstFrameTexture = playerWalkingFrames[0]
+        player = SKSpriteNode(texture: firstFrameTexture)
+        player.position = CGPoint(x:frame.midX, y: frame.midY)
+        player.setScale(0.4)
+        player.zPosition = 12
+        player.name = "player"
+       // player.physicsBody = SKPhysicsBody(texture: player.texture!, size: player.texture!.size())
+
+       // player.physicsBody?.affectedByGravity = true
+       // player.physicsBody?.isDynamic = true
+       
+       // player.physicsBody?.collisionBitMask = landCategory
+       // player.physicsBody?.categoryBitMask = playerCategory
+        
+        addChild(player)
+    }
+    
+    func animatePlayer()
+    {
+        player.run(SKAction.repeatForever(
+            SKAction.animate(with: playerWalkingFrames, timePerFrame: 0.1,
+                             resize: false,
+                             restore: true)),
+        withKey: "PlayerWalkingInPlace")
+    }
+    
     func addLand(x: Int, y: Int, type: String)
     {
         let land = SKSpriteNode(imageNamed: type)
         land.setScale(0.3)
         land.zPosition = 10
         land.position =  CGPoint(x: x, y: y)
-      //  land.color = .red
-       // land.colorBlendFactor = 0.4
         land.name = "land:" + type
         
         if type.contains("ufo")
@@ -134,9 +208,22 @@ class GameScene: SKScene {
             let delay = SKAction.wait(forDuration: 0.1)
             let tiltLeft = SKAction.rotate(byAngle: -0.1, duration: 0.25)
             
+            
+            
             land.run(SKAction.repeatForever(SKAction.sequence([tiltRight, tiltLeft, delay, tiltLeft, tiltRight, delay])))
             
+
+           
+    
         }
+        
+        if type.contains("rock") || type.contains("grassPurple") //|| type.contains("dirt_sand") || type.contains("dirt_grass")
+        {
+            
+          
+            
+        }
+        
         
         addChild(land)
         spriteList.append(land)
@@ -181,25 +268,25 @@ class GameScene: SKScene {
         
         var displayX:Int
     
-        for i in -14...14
+        for i in -((displaytileWidth) / 2)...(displaytileWidth / 2)
         {
-            displayX = mapCenteredLoc + i  //-?
+            displayX = mapCenteredLoc + i
             if displayX < 0
             {
-                displayX += planetCircumferance
+                displayX += planetCircumferance + 1
             }
             
             if displayX > planetCircumferance
             {
-                displayX -= planetCircumferance
+                displayX -= planetCircumferance + 1
             }
             
             let yAdjust = -((abs(i) * 2) + ((i * i) / 4))
-            let xPos = i * Int(grass.size.width)
-            for j in 0...10
+            let xPos = i * Int(grass.size.width )
+            for j in 1...displaytileHeight
             
             {
-                let yPos = Int(yAdjust - Int(dirt.size.height) * (j + 1))
+                let yPos = Int(yAdjust - Int(dirt.size.height  ) * (j + 1))
                 addLandAtLoc(x: xPos, y: yPos, mapChar: planetMap[displayX][j])
             }
             
@@ -254,7 +341,8 @@ class GameScene: SKScene {
     
     func buildPlanetMap(planetCircumferance: Int)
     {
-        playerPosition = (x: planetCircumferance / 2, y: 3)
+        playerPosition = CGPoint(x: planetCircumferance / 2, y: 2)
+        print("building map")
         mapCenteredLoc = planetCircumferance / 2
         for i in 0...planetCircumferance
         {
@@ -343,6 +431,103 @@ class GameScene: SKScene {
         }
     }
     
+    func moveLeft()
+    {
+        player.xScale = -abs(player.xScale)
+        movePlayer(tiles: -1)
+    }
+
+    func moveRight()
+    {
+        player.xScale = abs(player.xScale)
+        movePlayer(tiles: 1)
+        
+        
+    }
+    
+    func movePlayer(tiles: Int)  //positive for right, negative for left
+    {
+        var recentered = false
+        print("sign of tiles is: ", tiles.signum())
+        playerDistanceFromCenter += tiles
+        playerPosition.x += CGFloat(tiles)
+        
+        if playerPosition.x < 0
+        {
+            playerPosition.x += CGFloat(planetCircumferance + 1)
+        }
+        
+        if playerPosition.x > CGFloat(planetCircumferance)
+        {
+            playerPosition.x -= CGFloat(planetCircumferance + 1)
+        }
+        print("after adjustment playerposition.x = ", playerPosition.x)
+        
+        player.xScale = abs(player.xScale) * CGFloat(tiles.signum())
+        
+        
+        print("player distance from center: ", playerDistanceFromCenter)
+       // if abs( Int(playerPosition.x) - mapCenteredLoc) > (displaytileWidth / 2) - 2
+        if abs(playerDistanceFromCenter) > (displaytileWidth / 2) - 1
+        {
+            mapCenteredLoc = Int(playerPosition.x)
+            playerDistanceFromCenter = 0
+            
+            if mapCenteredLoc > planetCircumferance
+            {
+                mapCenteredLoc -= planetCircumferance
+            }
+            
+            if mapCenteredLoc < 0
+            {
+                mapCenteredLoc += planetCircumferance
+            }
+            player.removeAllActions()
+            drawPlanetCenteredAt(x: mapCenteredLoc)
+            recentered = true
+        }
+        
+        if let position = findPositionofMapLocation(x: CGFloat(playerPosition.x), y: CGFloat(playerPosition.y))
+        {
+            
+            
+            
+//            player.run(SKAction.repeatForever(
+//                SKAction.animate(with: playerWalkingFrames, timePerFrame: 0.1,
+//                                 resize: false,
+//                                 restore: true)),
+//                       withKey: "PlayerWalkingInPlace")
+//
+            
+            
+            print("position: ", position, ", x:", playerPosition.x)
+            if !recentered && (player.action(forKey: "moving") == nil)
+            {
+                let movePlayerAction = SKAction.move(to: position, duration: 0.25)
+                let animate = SKAction.animate(with: playerWalkingFrames, timePerFrame: 0.1, resize: false, restore: true)
+                player.run(animate, withKey: "walking")
+                player.run(.sequence([movePlayerAction, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "moving")
+                
+                
+               // player.run(movePlayerAction, withKey: "moving")
+            }
+            else
+            {
+                player.position.x = position.x
+                player.position.y = position.y
+            }
+            
+            
+        }
+        
+    }
+    
+    func playerMoveEnded()
+    {
+        player.removeAllActions()
+    }
+    
+    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
       //  if let label = self.label {
        //     label.run(SKAction.init(named: "Pulse")!, withKey: "fadeInOut")
@@ -363,29 +548,44 @@ class GameScene: SKScene {
         let touchLocation = touch?.location(in: self)
         let targetNode = atPoint(touchLocation!) as! SKSpriteNode
         
-            if targetNode.name == "right"
+        if targetNode.name == "right"
             {
-                mapCenteredLoc += 1
                 if mapCenteredLoc > planetCircumferance
                 {
                     mapCenteredLoc -= planetCircumferance
                 }
                 print("map centered at: ", mapCenteredLoc)
-                drawPlanetCenteredAt(x: mapCenteredLoc)
+                
+                moveRight()
                 print("tapped right!")
             }
             
             if targetNode.name == "left"
             {
-                mapCenteredLoc -= 1
+
                 if mapCenteredLoc < 0
                 {
                     mapCenteredLoc += planetCircumferance
                 }
                 print("map centered at: ", mapCenteredLoc)
-                drawPlanetCenteredAt(x: mapCenteredLoc)
+                
+                moveLeft()
                 print("tapped left!")
             }
+        
+        
+        if targetNode.name == "jump" && player.action(forKey: "jumping") == nil
+        {
+            print("jump")
+            
+            let jump = SKAction.moveBy(x: 0.0, y: 20.0, duration: 0.25)
+            let jumpTexture = SKTexture(imageNamed: "p1_jump")
+            let land = SKAction.moveBy(x: 0.0, y: -20.0, duration: 0.25)
+            jumpSound.play()
+            player.run(.sequence([.setTexture(SKTexture(imageNamed:"p1_jump")), jump, land]), completion: {self.player.texture = SKTexture(imageNamed: "p1_stand")})//,withKey: "jumping")
+            
+        }
+        
         if targetNode.name != nil
         {
             if (targetNode.name?.description.contains("dirt"))!
@@ -398,7 +598,7 @@ class GameScene: SKScene {
                 let mapLocation = mapLocationPressed(x: targetNode.position.x, y: touchLocation!.y)
                 print("character at map location is: ", planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY])
                 planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY] = "B"
-                drawPlanetCenteredAt(x: playerPosition.x)
+                drawPlanetCenteredAt(x: Int(playerPosition.x))
             }
             else
             {
@@ -415,13 +615,68 @@ class GameScene: SKScene {
         
     }
     
+    func findPositionofMapLocation(x: CGFloat, y: CGFloat) -> CGPoint? //(x: CGFloat, y: CGFloat)?
+    {
+        
+        var adjustedDisplayX = x - CGFloat(mapCenteredLoc)
+        
+        var displayMin = mapCenteredLoc - displaytileWidth / 2
+        var displayMax = mapCenteredLoc + displaytileWidth / 2
+        
+        if displayMin < 0
+        {
+            displayMin += planetCircumferance + 1
+        }
+        
+        if displayMax > planetCircumferance
+        {
+            displayMax -= planetCircumferance + 1
+        }
+        
+       // print("before adjust min: ", displayMin, ", max: ", displayMax,", x: ", x, ", adjustedDisplayX: ", adjustedDisplayX, ", centerLoc: ", mapCenteredLoc)
+
+        if displayMax < displayMin  && abs(adjustedDisplayX) > CGFloat(displaytileWidth / 2)
+        {
+             
+            if adjustedDisplayX < 0
+            {
+                adjustedDisplayX += CGFloat(planetCircumferance + 1)
+            }
+            
+            if adjustedDisplayX > CGFloat(planetCircumferance) || x > CGFloat(displayMin)
+            {
+                adjustedDisplayX -= CGFloat(planetCircumferance + 1)
+            }
+        }
+        
+       // print("after adjust  min: ", displayMin, ", max: ", displayMax,", x: ", x, ", adjustedDisplayX: ", adjustedDisplayX, ", centerLoc: ", mapCenteredLoc)
+        
+
+      //  print("adjustedDisplayX: ", adjustedDisplayX)
+        
+
+        
+        let tile = SKSpriteNode(imageNamed:"dirt_grass")
+        tile.setScale(0.3)
+        
+        let yAdjust = -((abs(adjustedDisplayX) * 2) + ((adjustedDisplayX * adjustedDisplayX) / 4))
+        let xPos = adjustedDisplayX * (tile.size.width)
+        
+        let yPos = (yAdjust - (tile.size.height) * (CGFloat(y) + 1.0))
+        print("x: ",x,", y:", y)
+        print("xpos, ypos: ", xPos,", ", yPos)
+        
+        return CGPoint(x: xPos, y: yPos)
+        
+    }
+    
     
     func mapLocationPressed(x: CGFloat, y: CGFloat) -> (mapLocationX: Int,mapLocationY: Int)
     {
         let grass = SKSpriteNode(imageNamed:"dirt_grass")
         grass.setScale(0.3)
         
-        var xAdjustment = -(x / grass.size.width)  //-?
+        var xAdjustment = -(x / grass.size.width)
         print("unrounded xAdjustment: ", xAdjustment)
         
         if xAdjustment < 0
@@ -462,7 +717,7 @@ class GameScene: SKScene {
        
         let tileHeight = grass.size.height
         
-        var adjustedY = y + doubleX + tileHeight
+        let adjustedY = y + doubleX + tileHeight
         let heightInTiles = -(adjustedY / tileHeight)
         
         print("height in tiles ", heightInTiles, "at y position: ", y)
@@ -498,10 +753,17 @@ class GameScene: SKScene {
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-      //  for t in touches { self.touchUp(atPoint: t.location(in: self)) }
+        //  for t in touches { self.touchUp(atPoint: t.location(in: self)) }
     }
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        
+        if (player.action(forKey: "moving") == nil)
+        {
+           // player.texture = SKTexture(imageNamed: "p1_stand")
+            
+        }
     }
 }
+

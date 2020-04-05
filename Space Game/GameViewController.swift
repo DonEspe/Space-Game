@@ -15,16 +15,17 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if let view = self.view as! SKView? {
+        if let view = self.view as! SKView?
+        {
             // Load the SKScene from 'GameScene.sks'
-            if let scene = SKScene(fileNamed: "GameScene") {
+            if let scene =    SKScene(fileNamed: "GameScene") //GameScene(size: view.bounds.size) //(this commented part doesn't work quite right with the mac view...
+                  {
                 // Set the scale mode to scale to fit the window
-                scene.scaleMode = .aspectFit
-                
+            scene.scaleMode = .aspectFit  //.resizeFill
                 // Present the scene
-                scene.size = view.bounds.size
-                view.presentScene(scene)
-            }
+            scene.size = view.bounds.size
+            view.presentScene(scene)
+        }
             
             view.ignoresSiblingOrder = true
             

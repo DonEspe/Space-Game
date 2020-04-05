@@ -27,6 +27,14 @@
 		FE2F43662438441D008C04E9 /* rock.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43652438441D008C04E9 /* rock.png */; };
 		FE2F436E24384788008C04E9 /* tile_grassPurpleLarge.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F436D24384788008C04E9 /* tile_grassPurpleLarge.png */; };
 		FE2F4370243847F3008C04E9 /* wingMan1.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F436F243847F2008C04E9 /* wingMan1.png */; };
+		FE2F43952438F786008C04E9 /* p1_duck.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43782438F783008C04E9 /* p1_duck.png */; };
+		FE2F43A32438F786008C04E9 /* p1_front.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43872438F783008C04E9 /* p1_front.png */; };
+		FE2F43A72438F786008C04E9 /* p1_hurt.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F438B2438F785008C04E9 /* p1_hurt.png */; };
+		FE2F43A92438F786008C04E9 /* p1_jump.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F438D2438F785008C04E9 /* p1_jump.png */; };
+		FE2F43AA2438F786008C04E9 /* p1_stand.png in Resources */ = {isa = PBXBuildFile; fileRef = FE2F438E2438F786008C04E9 /* p1_stand.png */; };
+		FE2F43AC2438F8F8008C04E9 /* p1_walk.atlas in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43AB2438F8F7008C04E9 /* p1_walk.atlas */; };
+		FEE1005E2439927700973EB9 /* sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE1005D2439927700973EB9 /* sound.swift */; };
+		FEE100622439957200973EB9 /* jumpSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FEE100612439957200973EB9 /* jumpSound.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +61,14 @@
 		FE2F43652438441D008C04E9 /* rock.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rock.png; sourceTree = "<group>"; };
 		FE2F436D24384788008C04E9 /* tile_grassPurpleLarge.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tile_grassPurpleLarge.png; sourceTree = "<group>"; };
 		FE2F436F243847F2008C04E9 /* wingMan1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wingMan1.png; sourceTree = "<group>"; };
+		FE2F43782438F783008C04E9 /* p1_duck.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = p1_duck.png; sourceTree = "<group>"; };
+		FE2F43872438F783008C04E9 /* p1_front.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = p1_front.png; sourceTree = "<group>"; };
+		FE2F438B2438F785008C04E9 /* p1_hurt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = p1_hurt.png; sourceTree = "<group>"; };
+		FE2F438D2438F785008C04E9 /* p1_jump.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = p1_jump.png; sourceTree = "<group>"; };
+		FE2F438E2438F786008C04E9 /* p1_stand.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = p1_stand.png; sourceTree = "<group>"; };
+		FE2F43AB2438F8F7008C04E9 /* p1_walk.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = p1_walk.atlas; sourceTree = "<group>"; };
+		FEE1005D2439927700973EB9 /* sound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sound.swift; sourceTree = "<group>"; };
+		FEE100612439957200973EB9 /* jumpSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = jumpSound.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +99,13 @@
 				FE2F43652438441D008C04E9 /* rock.png */,
 				FE2F436D24384788008C04E9 /* tile_grassPurpleLarge.png */,
 				FE2F436F243847F2008C04E9 /* wingMan1.png */,
+				FE2F43782438F783008C04E9 /* p1_duck.png */,
+				FE2F43872438F783008C04E9 /* p1_front.png */,
+				FE2F438B2438F785008C04E9 /* p1_hurt.png */,
+				FE2F438D2438F785008C04E9 /* p1_jump.png */,
+				FE2F438E2438F786008C04E9 /* p1_stand.png */,
+				FEE100612439957200973EB9 /* jumpSound.mp3 */,
+				FE2F43AB2438F8F7008C04E9 /* p1_walk.atlas */,
 			);
 			sourceTree = "<group>";
 		};
@@ -105,6 +128,7 @@
 				FE2F433E2436B24A008C04E9 /* GameViewController.swift */,
 				FE2F43402436B24A008C04E9 /* Main.storyboard */,
 				FE2F43432436B24D008C04E9 /* Assets.xcassets */,
+				FEE1005D2439927700973EB9 /* sound.swift */,
 				FE2F43452436B24D008C04E9 /* LaunchScreen.storyboard */,
 				FE2F43482436B24D008C04E9 /* Info.plist */,
 			);
@@ -175,15 +199,22 @@
 				FE2F43622437AAEF008C04E9 /* gravel_stone.png in Resources */,
 				FE2F43552436B71C008C04E9 /* star1.png in Resources */,
 				FE2F43602437AA34008C04E9 /* ufoGreen.png in Resources */,
+				FE2F43A92438F786008C04E9 /* p1_jump.png in Resources */,
+				FE2F43AA2438F786008C04E9 /* p1_stand.png in Resources */,
 				FE2F43392436B24A008C04E9 /* GameScene.sks in Resources */,
 				FE2F43532436B3A8008C04E9 /* dirt_grass.png in Resources */,
 				FE2F435C243785D9008C04E9 /* dirt_sand.png in Resources */,
 				FE2F43442436B24D008C04E9 /* Assets.xcassets in Resources */,
+				FE2F43A32438F786008C04E9 /* p1_front.png in Resources */,
 				FE2F43572436B865008C04E9 /* purple.png in Resources */,
+				FE2F43AC2438F8F8008C04E9 /* p1_walk.atlas in Resources */,
 				FE2F43592436C441008C04E9 /* gravel_dirt.png in Resources */,
+				FEE100622439957200973EB9 /* jumpSound.mp3 in Resources */,
+				FE2F43A72438F786008C04E9 /* p1_hurt.png in Resources */,
 				FE2F43662438441D008C04E9 /* rock.png in Resources */,
 				FE2F436E24384788008C04E9 /* tile_grassPurpleLarge.png in Resources */,
 				FE2F43472436B24D008C04E9 /* LaunchScreen.storyboard in Resources */,
+				FE2F43952438F786008C04E9 /* p1_duck.png in Resources */,
 				FE2F435E2437A8A3008C04E9 /* playerShip1_blue.png in Resources */,
 				FE2F433B2436B24A008C04E9 /* Actions.sks in Resources */,
 			);
@@ -199,6 +230,7 @@
 				FE2F433D2436B24A008C04E9 /* GameScene.swift in Sources */,
 				FE2F433F2436B24A008C04E9 /* GameViewController.swift in Sources */,
 				FE2F43372436B24A008C04E9 /* AppDelegate.swift in Sources */,
+				FEE1005E2439927700973EB9 /* sound.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
