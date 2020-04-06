@@ -34,7 +34,8 @@ class GameScene: SKScene {
     let hitSound = Sound(name: "stoneHit1", type: "mp3")
     
     let displaytileHeight = 15
-    let displaytileWidth = 24 // will add one for center I believe
+    let displaytileWidth = 26 // will add one for center I believe
+    let tileScale = CGFloat(0.4)
     
     var spriteList = [SKSpriteNode]()
     
@@ -157,7 +158,7 @@ class GameScene: SKScene {
     func addLand(x: Int, y: Int, type: String)
     {
         let land = SKSpriteNode(imageNamed: type)
-        land.setScale(0.3)
+        land.setScale(tileScale)
         land.zPosition = 10
         land.position =  CGPoint(x: x, y: y)
         land.name = "land:" + type
@@ -222,10 +223,10 @@ class GameScene: SKScene {
         }
         
         let tile = SKSpriteNode(imageNamed:"dirt_grass")
-        tile.setScale(0.3)
+        tile.setScale(tileScale)
         
         //let dirt = SKSpriteNode(imageNamed: "gravel_dirt")
-        //dirt.setScale(0.3)
+        //dirt.setScale(tileScale)
         
         var displayX:Int
     
@@ -823,7 +824,7 @@ class GameScene: SKScene {
         }
         
         let tile = SKSpriteNode(imageNamed:"dirt_grass")
-        tile.setScale(0.3)
+        tile.setScale(tileScale)
         
          //yPos +=  (mapCenteredLocY - 3) * Int(tile.size.height)
         let adjustYForCenter = y - (CGFloat(mapCenteredLocY - 3) * tile.size.height)
@@ -842,7 +843,7 @@ class GameScene: SKScene {
     func mapLocationPressed(x: CGFloat, y: CGFloat) -> (mapLocationX: Int,mapLocationY: Int)
     {
         let tile = SKSpriteNode(imageNamed:"dirt_grass")
-        tile.setScale(0.3)
+        tile.setScale(tileScale)
         
         var xAdjustment = -(x / tile.size.width)
        // print("unrounded xAdjustment: ", xAdjustment)
