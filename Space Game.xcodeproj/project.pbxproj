@@ -35,6 +35,7 @@
 		FE2F43AC2438F8F8008C04E9 /* p1_walk.atlas in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43AB2438F8F7008C04E9 /* p1_walk.atlas */; };
 		FEE1005E2439927700973EB9 /* sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE1005D2439927700973EB9 /* sound.swift */; };
 		FEE100622439957200973EB9 /* jumpSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FEE100612439957200973EB9 /* jumpSound.mp3 */; };
+		FEE1C5C7243AA38F008F828F /* stoneHit1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FEE1C5C6243AA38F008F828F /* stoneHit1.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -69,6 +70,7 @@
 		FE2F43AB2438F8F7008C04E9 /* p1_walk.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = p1_walk.atlas; sourceTree = "<group>"; };
 		FEE1005D2439927700973EB9 /* sound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sound.swift; sourceTree = "<group>"; };
 		FEE100612439957200973EB9 /* jumpSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = jumpSound.mp3; sourceTree = "<group>"; };
+		FEE1C5C6243AA38F008F828F /* stoneHit1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = stoneHit1.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +106,7 @@
 				FE2F438B2438F785008C04E9 /* p1_hurt.png */,
 				FE2F438D2438F785008C04E9 /* p1_jump.png */,
 				FE2F438E2438F786008C04E9 /* p1_stand.png */,
+				FEE1C5C6243AA38F008F828F /* stoneHit1.mp3 */,
 				FEE100612439957200973EB9 /* jumpSound.mp3 */,
 				FE2F43AB2438F8F7008C04E9 /* p1_walk.atlas */,
 			);
@@ -199,6 +202,7 @@
 				FE2F43622437AAEF008C04E9 /* gravel_stone.png in Resources */,
 				FE2F43552436B71C008C04E9 /* star1.png in Resources */,
 				FE2F43602437AA34008C04E9 /* ufoGreen.png in Resources */,
+				FEE1C5C7243AA38F008F828F /* stoneHit1.mp3 in Resources */,
 				FE2F43A92438F786008C04E9 /* p1_jump.png in Resources */,
 				FE2F43AA2438F786008C04E9 /* p1_stand.png in Resources */,
 				FE2F43392436B24A008C04E9 /* GameScene.sks in Resources */,
