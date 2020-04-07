@@ -36,6 +36,7 @@
 		FEE1005E2439927700973EB9 /* sound.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE1005D2439927700973EB9 /* sound.swift */; };
 		FEE100622439957200973EB9 /* jumpSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FEE100612439957200973EB9 /* jumpSound.mp3 */; };
 		FEE1C5C7243AA38F008F828F /* stoneHit1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FEE1C5C6243AA38F008F828F /* stoneHit1.mp3 */; };
+		FEE1C5C9243C1D75008F828F /* PlanetBuilding.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE1C5C8243C1D75008F828F /* PlanetBuilding.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +72,7 @@
 		FEE1005D2439927700973EB9 /* sound.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = sound.swift; sourceTree = "<group>"; };
 		FEE100612439957200973EB9 /* jumpSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = jumpSound.mp3; sourceTree = "<group>"; };
 		FEE1C5C6243AA38F008F828F /* stoneHit1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = stoneHit1.mp3; sourceTree = "<group>"; };
+		FEE1C5C8243C1D75008F828F /* PlanetBuilding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetBuilding.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				FE2F43382436B24A008C04E9 /* GameScene.sks */,
 				FE2F433A2436B24A008C04E9 /* Actions.sks */,
 				FE2F433C2436B24A008C04E9 /* GameScene.swift */,
+				FEE1C5C8243C1D75008F828F /* PlanetBuilding.swift */,
 				FE2F433E2436B24A008C04E9 /* GameViewController.swift */,
 				FE2F43402436B24A008C04E9 /* Main.storyboard */,
 				FE2F43432436B24D008C04E9 /* Assets.xcassets */,
@@ -234,6 +237,7 @@
 				FE2F433D2436B24A008C04E9 /* GameScene.swift in Sources */,
 				FE2F433F2436B24A008C04E9 /* GameViewController.swift in Sources */,
 				FE2F43372436B24A008C04E9 /* AppDelegate.swift in Sources */,
+				FEE1C5C9243C1D75008F828F /* PlanetBuilding.swift in Sources */,
 				FEE1005E2439927700973EB9 /* sound.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
