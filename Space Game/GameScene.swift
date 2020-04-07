@@ -12,7 +12,7 @@ import GameplayKit
 var planetMap = Array(repeating: Array(repeating: Character("."), count: 20), count: 100)
 var mapCenteredLocX = 15
 var mapCenteredLocY = 2
-var playerPosition = (x: 10, y: 2)
+var playerPosition = (x: 20, y: 2)
 
 let displaytileHeight = 15
 let displaytileWidth = 26 // will add one for center I believe
@@ -111,6 +111,10 @@ class GameScene: SKScene {
     
     func placePlayer()
     {
+//        if flying
+//        {
+//            player.texture = SKTexture(imageNamed: "playerShip1_blue")
+//        }
         if let position = findPositionofMapLocation(x: playerPosition.x , y: playerPosition.y)
         {
             player.position.x = position.x
@@ -188,14 +192,9 @@ class GameScene: SKScene {
             let tiltRight = SKAction.rotate(byAngle: 0.1, duration: 0.25)
             let delay = SKAction.wait(forDuration: 0.1)
             let tiltLeft = SKAction.rotate(byAngle: -0.1, duration: 0.25)
-            
-            
-            
+ 
             land.run(SKAction.repeatForever(SKAction.sequence([tiltRight, tiltLeft, delay, tiltLeft, tiltRight, delay])))
-            
 
-           
-    
         }
         
         addChild(land)
@@ -317,28 +316,20 @@ class GameScene: SKScene {
     
     
     
-    func touchDown(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.green
-            self.addChild(n)
-        }
+    func touchDown(atPoint pos : CGPoint)
+    {
+        
     }
     
-    func touchMoved(toPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.blue
-            self.addChild(n)
-        }
+    func touchMoved(toPoint pos : CGPoint)
+    {
+        
+        
     }
     
-    func touchUp(atPoint pos : CGPoint) {
-        if let n = self.spinnyNode?.copy() as! SKShapeNode? {
-            n.position = pos
-            n.strokeColor = SKColor.red
-            self.addChild(n)
-        }
+    func touchUp(atPoint pos : CGPoint)
+    {
+        
     }
     
     func adjustForWrap(x: Int) -> Int
@@ -482,10 +473,18 @@ class GameScene: SKScene {
             
             if !recentered && (player.action(forKey: "moving") == nil) && (player.action(forKey: "falling") == nil)
             {
-                let movePlayerAction = SKAction.move(to: position, duration: 0.25)
-                let animate = SKAction.animate(with: playerWalkingFrames, timePerFrame: 0.1, resize: false, restore: true)
-                player.run(animate, withKey: "walking")
-                player.run(.sequence([movePlayerAction, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "moving")
+                if !flying
+                {
+                    let movePlayerAction = SKAction.move(to: position, duration: 0.25)
+                    let animate = SKAction.animate(with: playerWalkingFrames, timePerFrame: 0.1, resize: false, restore: true)
+                    player.run(animate, withKey: "walking")
+                    player.run(.sequence([movePlayerAction, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "moving")
+                }
+                else
+                {
+                    let movePlayerAction = SKAction.move(to: position, duration: 0.25)
+                    player.run(movePlayerAction, withKey: "moving")
+                }
             }
             else
             {
@@ -579,23 +578,44 @@ class GameScene: SKScene {
             
             if canJump.contains(currentCharacter) //currentCharacter == " " || currentCharacter == "r" || currentCharacter == "^" || currentCharacter == "p"
             {
-                let jump = SKAction.moveBy(x: 0.0, y: 20.0, duration: 0.25)
-                let jumpTexture = SKTexture(imageNamed: "p1_jump")
-                let land = SKAction.moveBy(x: 0.0, y: -20.0, duration: 0.25)
-                jumpSound.play()
-                player.run(.sequence([.setTexture(jumpTexture), jump, land]), completion: {self.player.texture = SKTexture(imageNamed: "p1_stand")})//,withKey: "jumping")
                 
+                if planetMap[playerPosition.x][playerPosition.y] == "^"
+                {
+                    print("enter ship")
+                    flying = true
+                    onLand = false
+                    player.texture = SKTexture(imageNamed: "playerShip1_blue")
+                    planetMap[playerPosition.x][playerPosition.y] = " "
+                    drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
+                    placePlayer()
+                    
+                }
+                else
+                {
+                    if !flying
+                    {
+                        let jump = SKAction.moveBy(x: 0.0, y: 20.0, duration: 0.25)
+                        let jumpTexture = SKTexture(imageNamed: "p1_jump")
+                        let land = SKAction.moveBy(x: 0.0, y: -20.0, duration: 0.25)
+                        jumpSound.play()
+                        player.run(.sequence([.setTexture(jumpTexture), jump, land]), completion: {self.player.texture = SKTexture(imageNamed: "p1_stand")})//,withKey: "jumping")
+                    }
+                }
             }
             else
             {
-               // dsds
+                
                 
                 playerPosition.y -= 1
                 let position = findPositionofMapLocation(x: playerPosition.x, y: playerPosition.y)!
-                let movePlayerAction = SKAction.move(to: position, duration: 0.25)
-                let animate = SKAction.animate(with: playerWalkingFrames, timePerFrame: 0.1, resize: false, restore: true)
-                player.run(animate, withKey: "walking")
-                player.run(.sequence([movePlayerAction, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "moving")
+                if !flying
+                {
+                    let movePlayerAction = SKAction.move(to: position, duration: 0.25)
+                    let animate = SKAction.animate(with: playerWalkingFrames, timePerFrame: 0.1, resize: false, restore: true)
+                    player.run(animate, withKey: "walking")
+                    player.run(.sequence([movePlayerAction, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "moving")
+                    
+                }
                 
             }
             
@@ -661,6 +681,18 @@ class GameScene: SKScene {
     
     func moveDown()
     {
+        
+        if flying && cantFallThrough.contains(planetMap[playerPosition.x][playerPosition.y + 1])
+        {
+            print("landing")
+            flying = false
+            onLand = true
+            planetMap[playerPosition.x][playerPosition.y] = "^"
+            player.texture = SKTexture(imageNamed: "p1_stand.png")
+            drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
+            placePlayer()
+            return
+        }
         var delay = SKAction.wait(forDuration: 0.0)
         if (player.action(forKey: "moving") != nil) && falling
         {
@@ -709,7 +741,10 @@ class GameScene: SKScene {
                 let movePlayerActionVertical = SKAction.move(to: usePosition, duration: (0.1 + Double(fallDistance) * 0.05))
                 let playSound = SKAction.run {self.hitSound.play()}
                 //hitSound.play()
-                player.run(.sequence([delay, movePlayerActionVertical, playSound, playerbounce, playerbounce.reversed(), .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "falling")
+                if !flying
+                {
+                    player.run(.sequence([delay, movePlayerActionVertical, playSound, playerbounce, playerbounce.reversed(), .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "falling")
+                }
                 
             }
         }
@@ -719,8 +754,11 @@ class GameScene: SKScene {
             {
                 let usePosition = findPositionofMapLocation(x: playerPosition.x, y: playerPosition.y)!
                 let movePlayerActionVertical = SKAction.move(to: usePosition, duration: 0.15)                //player.run(animate, withKey: "walking")
-                animatePlayer()
-                player.run(.sequence([delay, movePlayerActionVertical, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "moving")
+                if !flying
+                {
+                    animatePlayer()
+                    player.run(.sequence([delay, movePlayerActionVertical, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "moving")
+                }
             }
         }
         
