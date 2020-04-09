@@ -12,7 +12,7 @@ import GameplayKit
 var planetMap = Array(repeating: Array(repeating: Character("."), count: 20), count: 100)
 var mapCenteredLocX = 15
 var mapCenteredLocY = 2
-var playerPosition = (x: 20, y: 2)
+var playerPosition = (x: 24, y: 2)
 
 let displaytileHeight = 15
 let displaytileWidth = 26 // will add one for center I believe
@@ -70,6 +70,15 @@ class GameScene: SKScene {
         drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
         planetBuilder.printMap()
         
+        buildUI()
+        
+        buildPlayer()
+        player.xScale = -player.xScale
+        placePlayer()
+    }
+    
+    func buildUI()
+    {
         button = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
         button.position = CGPoint(x:0, y: 124);
         button.zPosition = 35
@@ -96,9 +105,6 @@ class GameScene: SKScene {
         
         self.addChild(button)
         
-        buildPlayer()
-        player.xScale = -player.xScale
-        placePlayer()
     }
     
     func rotatePlayer()
@@ -581,7 +587,16 @@ class GameScene: SKScene {
             if playerPosition.y < 0
             {
                 playerPosition.y = 0
+                
+                let spaceScene = GameScene(fileNamed: "SpaceScene")!
+                spaceScene.size = CGSize(width: 1334, height: 750)
+                spaceScene.scaleMode = .aspectFit
+              //  spaceScene.anchorPoint = scene?.anchorPoint as! CGPoint //CGPoint(x: 0.5, y: 0.7)
+                scene?.view?.presentScene(spaceScene)
             }
+            
+           
+            
             
             let rotateAction = SKAction.rotate(toAngle: 0.0, duration: 0.15, shortestUnitArc: true)
             player.run(rotateAction)
@@ -753,7 +768,6 @@ class GameScene: SKScene {
             print("setting downBegan to false")
             downBegan = false
         }
-        "down"
         
         
         if targetNode.name != nil  //clicked on a node that didn't already have a defined action

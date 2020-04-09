@@ -37,6 +37,17 @@
 		FEE100622439957200973EB9 /* jumpSound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FEE100612439957200973EB9 /* jumpSound.mp3 */; };
 		FEE1C5C7243AA38F008F828F /* stoneHit1.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FEE1C5C6243AA38F008F828F /* stoneHit1.mp3 */; };
 		FEE1C5C9243C1D75008F828F /* PlanetBuilding.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE1C5C8243C1D75008F828F /* PlanetBuilding.swift */; };
+		FEE1C5CF243E541C008F828F /* SpaceScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEE1C5CE243E541C008F828F /* SpaceScene.swift */; };
+		FEE1C5D2243E55C0008F828F /* ladder_mid.png in Resources */ = {isa = PBXBuildFile; fileRef = FEE1C5D0243E55BF008F828F /* ladder_mid.png */; };
+		FEE1C5D3243E55C0008F828F /* ladder_top.png in Resources */ = {isa = PBXBuildFile; fileRef = FEE1C5D1243E55C0008F828F /* ladder_top.png */; };
+		FEE1C5D5243E55C8008F828F /* liquidLava.png in Resources */ = {isa = PBXBuildFile; fileRef = FEE1C5D4243E55C7008F828F /* liquidLava.png */; };
+		FEE1C5D7243E55DB008F828F /* liquidWater.png in Resources */ = {isa = PBXBuildFile; fileRef = FEE1C5D6243E55DB008F828F /* liquidWater.png */; };
+		FEE1C5DA243E55E2008F828F /* liquidWaterTop_mid.png in Resources */ = {isa = PBXBuildFile; fileRef = FEE1C5D8243E55E1008F828F /* liquidWaterTop_mid.png */; };
+		FEE1C5DB243E55E2008F828F /* liquidWaterTop.png in Resources */ = {isa = PBXBuildFile; fileRef = FEE1C5D9243E55E1008F828F /* liquidWaterTop.png */; };
+		FEE1C5DD243E563F008F828F /* black.png in Resources */ = {isa = PBXBuildFile; fileRef = FEE1C5DC243E563F008F828F /* black.png */; };
+		FEE1C5DF243E5795008F828F /* SpaceScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = FEE1C5DE243E5795008F828F /* SpaceScene.sks */; };
+		FEE1C5E1243E58FB008F828F /* darkPurple.png in Resources */ = {isa = PBXBuildFile; fileRef = FEE1C5E0243E58FB008F828F /* darkPurple.png */; };
+		FEE1C5E5243EB4F4008F828F /* meteorBrown_big4.png in Resources */ = {isa = PBXBuildFile; fileRef = FEE1C5E4243EB4F4008F828F /* meteorBrown_big4.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -73,6 +84,17 @@
 		FEE100612439957200973EB9 /* jumpSound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = jumpSound.mp3; sourceTree = "<group>"; };
 		FEE1C5C6243AA38F008F828F /* stoneHit1.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = stoneHit1.mp3; sourceTree = "<group>"; };
 		FEE1C5C8243C1D75008F828F /* PlanetBuilding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanetBuilding.swift; sourceTree = "<group>"; };
+		FEE1C5CE243E541C008F828F /* SpaceScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceScene.swift; sourceTree = "<group>"; };
+		FEE1C5D0243E55BF008F828F /* ladder_mid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ladder_mid.png; sourceTree = "<group>"; };
+		FEE1C5D1243E55C0008F828F /* ladder_top.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ladder_top.png; sourceTree = "<group>"; };
+		FEE1C5D4243E55C7008F828F /* liquidLava.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = liquidLava.png; sourceTree = "<group>"; };
+		FEE1C5D6243E55DB008F828F /* liquidWater.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = liquidWater.png; sourceTree = "<group>"; };
+		FEE1C5D8243E55E1008F828F /* liquidWaterTop_mid.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = liquidWaterTop_mid.png; sourceTree = "<group>"; };
+		FEE1C5D9243E55E1008F828F /* liquidWaterTop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = liquidWaterTop.png; sourceTree = "<group>"; };
+		FEE1C5DC243E563F008F828F /* black.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = black.png; sourceTree = "<group>"; };
+		FEE1C5DE243E5795008F828F /* SpaceScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = SpaceScene.sks; sourceTree = "<group>"; };
+		FEE1C5E0243E58FB008F828F /* darkPurple.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = darkPurple.png; sourceTree = "<group>"; };
+		FEE1C5E4243EB4F4008F828F /* meteorBrown_big4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = meteorBrown_big4.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +116,8 @@
 				FE2F43522436B3A8008C04E9 /* dirt_grass.png */,
 				FE2F43542436B71C008C04E9 /* star1.png */,
 				FE2F43562436B865008C04E9 /* purple.png */,
+				FEE1C5DC243E563F008F828F /* black.png */,
+				FEE1C5E0243E58FB008F828F /* darkPurple.png */,
 				FE2F43582436C440008C04E9 /* gravel_dirt.png */,
 				FE2F435B243785D8008C04E9 /* dirt_sand.png */,
 				FE2F435D2437A8A2008C04E9 /* playerShip1_blue.png */,
@@ -110,6 +134,13 @@
 				FE2F438E2438F786008C04E9 /* p1_stand.png */,
 				FEE1C5C6243AA38F008F828F /* stoneHit1.mp3 */,
 				FEE100612439957200973EB9 /* jumpSound.mp3 */,
+				FEE1C5D0243E55BF008F828F /* ladder_mid.png */,
+				FEE1C5D1243E55C0008F828F /* ladder_top.png */,
+				FEE1C5D4243E55C7008F828F /* liquidLava.png */,
+				FEE1C5E4243EB4F4008F828F /* meteorBrown_big4.png */,
+				FEE1C5D6243E55DB008F828F /* liquidWater.png */,
+				FEE1C5D8243E55E1008F828F /* liquidWaterTop_mid.png */,
+				FEE1C5D9243E55E1008F828F /* liquidWaterTop.png */,
 				FE2F43AB2438F8F7008C04E9 /* p1_walk.atlas */,
 			);
 			sourceTree = "<group>";
@@ -128,10 +159,12 @@
 				FE2F435A2436D538008C04E9 /* Space Game.entitlements */,
 				FE2F43362436B24A008C04E9 /* AppDelegate.swift */,
 				FE2F43382436B24A008C04E9 /* GameScene.sks */,
+				FEE1C5DE243E5795008F828F /* SpaceScene.sks */,
 				FE2F433A2436B24A008C04E9 /* Actions.sks */,
-				FE2F433C2436B24A008C04E9 /* GameScene.swift */,
-				FEE1C5C8243C1D75008F828F /* PlanetBuilding.swift */,
 				FE2F433E2436B24A008C04E9 /* GameViewController.swift */,
+				FE2F433C2436B24A008C04E9 /* GameScene.swift */,
+				FEE1C5CE243E541C008F828F /* SpaceScene.swift */,
+				FEE1C5C8243C1D75008F828F /* PlanetBuilding.swift */,
 				FE2F43402436B24A008C04E9 /* Main.storyboard */,
 				FE2F43432436B24D008C04E9 /* Assets.xcassets */,
 				FEE1005D2439927700973EB9 /* sound.swift */,
@@ -200,24 +233,34 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE2F4370243847F3008C04E9 /* wingMan1.png in Resources */,
+				FEE1C5DF243E5795008F828F /* SpaceScene.sks in Resources */,
 				FE2F436424383B92008C04E9 /* fence_wood.png in Resources */,
 				FE2F43422436B24A008C04E9 /* Main.storyboard in Resources */,
 				FE2F43622437AAEF008C04E9 /* gravel_stone.png in Resources */,
+				FEE1C5D2243E55C0008F828F /* ladder_mid.png in Resources */,
 				FE2F43552436B71C008C04E9 /* star1.png in Resources */,
 				FE2F43602437AA34008C04E9 /* ufoGreen.png in Resources */,
+				FEE1C5D7243E55DB008F828F /* liquidWater.png in Resources */,
 				FEE1C5C7243AA38F008F828F /* stoneHit1.mp3 in Resources */,
+				FEE1C5E5243EB4F4008F828F /* meteorBrown_big4.png in Resources */,
 				FE2F43A92438F786008C04E9 /* p1_jump.png in Resources */,
 				FE2F43AA2438F786008C04E9 /* p1_stand.png in Resources */,
 				FE2F43392436B24A008C04E9 /* GameScene.sks in Resources */,
+				FEE1C5DB243E55E2008F828F /* liquidWaterTop.png in Resources */,
 				FE2F43532436B3A8008C04E9 /* dirt_grass.png in Resources */,
 				FE2F435C243785D9008C04E9 /* dirt_sand.png in Resources */,
 				FE2F43442436B24D008C04E9 /* Assets.xcassets in Resources */,
 				FE2F43A32438F786008C04E9 /* p1_front.png in Resources */,
+				FEE1C5DA243E55E2008F828F /* liquidWaterTop_mid.png in Resources */,
+				FEE1C5D3243E55C0008F828F /* ladder_top.png in Resources */,
 				FE2F43572436B865008C04E9 /* purple.png in Resources */,
 				FE2F43AC2438F8F8008C04E9 /* p1_walk.atlas in Resources */,
 				FE2F43592436C441008C04E9 /* gravel_dirt.png in Resources */,
 				FEE100622439957200973EB9 /* jumpSound.mp3 in Resources */,
 				FE2F43A72438F786008C04E9 /* p1_hurt.png in Resources */,
+				FEE1C5E1243E58FB008F828F /* darkPurple.png in Resources */,
+				FEE1C5D5243E55C8008F828F /* liquidLava.png in Resources */,
+				FEE1C5DD243E563F008F828F /* black.png in Resources */,
 				FE2F43662438441D008C04E9 /* rock.png in Resources */,
 				FE2F436E24384788008C04E9 /* tile_grassPurpleLarge.png in Resources */,
 				FE2F43472436B24D008C04E9 /* LaunchScreen.storyboard in Resources */,
@@ -239,6 +282,7 @@
 				FE2F43372436B24A008C04E9 /* AppDelegate.swift in Sources */,
 				FEE1C5C9243C1D75008F828F /* PlanetBuilding.swift in Sources */,
 				FEE1005E2439927700973EB9 /* sound.swift in Sources */,
+				FEE1C5CF243E541C008F828F /* SpaceScene.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
