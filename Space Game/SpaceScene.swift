@@ -89,11 +89,6 @@ class SpaceScene: SKScene
             
             print("planetSize: ", planetSize,", relative Location: ", relativeLocation,", angle on planet: ", angleOnPlanet)
             
-            
-            
-//            self.player.position = planet.position
-//            self.player.position.y += planetSize
-            
             self.player.position.x = planetSize * sin(angleOnPlanet * degreesToRadians) + planet.position.x
             self.player.position.y = planetSize * cos(angleOnPlanet * degreesToRadians) + planet.position.y
             
@@ -110,10 +105,6 @@ class SpaceScene: SKScene
         
         player.zRotation = -angle
         
-        //        let rotateAction = SKAction.rotate(toAngle: angle - (.pi / 4.0), duration: 0.0)
-        //        player.run(rotateAction)
-        
-        //player.position = CGPoint(x: 0, y: 0)
         player.name = "player"
         print("player position: ", player.position)
         
@@ -363,15 +354,8 @@ class SpaceScene: SKScene
         
         let angle = atan2(self.player.position.x - planet.position.x, self.player.position.y - planet.position.y)
         
-        let decimalLocation = (angle ) / (2 * .pi)
-        
-        print("character landing location angle: ", angle,", decimalLocation: ", decimalLocation)
-        
-        gameScene.arrivedAtLocation = decimalLocation
         gameScene.landingAngle = angle
-
-
-        //  spaceScene.anchorPoint = scene?.anchorPoint as! CGPoint //CGPoint(x: 0.5, y: 0.7)
+        
         scene?.view?.presentScene(gameScene)
     }
     
@@ -453,24 +437,19 @@ class SpaceScene: SKScene
             if abs(self.player.position.x - planet.position.x) < planetSize && abs(self.player.position.y - planet.position.y) < planetSize
             {
                 print("in planet - do stuff")
-                print("landing on planet: ", planet.name)
+                print("landing on planet: ", planet.name ?? "Unknown")
                 
-               // self.landOnPlanet(name: planet.name ?? "")
                 self.landOnPlanet(planet: planet)
             }
             
         }))
         
         
-        // print("player x:, ", player.position.x,", y: ", player.position.y)
-        
         if !isLocationOnScreen(position: player.position)  && counter > 5
         {
             counter = 0
             print("off screen - need to adjust view")
-            //            let zoomOutAction = SKAction.scale(to: 2.0, duration: 1)
-            //            cameraNode.run(zoomOutAction)
-            
+        
             let changeInX = -player.position.x / 2
             let changeInY = -player.position.y / 2
             
@@ -485,13 +464,9 @@ class SpaceScene: SKScene
                 planet.run(movePlanet)
             }))
             
-            //planet.position.x += changeInX
-            // planet.position.y += changeInY
             
             let movePlayer = SKAction.move(to: CGPoint(x: player.position.x + changeInX, y: player.position.y + changeInY), duration: 0.2)
             player.run(movePlayer)
-            
-            //player.position = CGPoint(x: player.position.x + changeInX, y: player.position.y + changeInY)
             
             
         }
@@ -502,12 +477,6 @@ class SpaceScene: SKScene
         player.position = CGPoint(x:player.position.x - sin(player.zRotation) * playerVelocity / 2.0,y:player.position.y + cos(player.zRotation) * playerVelocity / 2.0)
         
         showActiveTouches()
-        
-        // let angle = atan2(playerVelocity.dy, playerVelocity.dx)
-        // player.zRotation = angle - .pi / 2.0
-        
-        
-        
         
     }
 }

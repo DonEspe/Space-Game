@@ -50,7 +50,6 @@ class GameScene: SKScene {
     
     var downBegan = false
     
-    var arrivedAtLocation = CGFloat(0)
     var landingAngle = CGFloat(0)
     
     
@@ -80,48 +79,25 @@ class GameScene: SKScene {
             flying = true
         }
         
-        print("character arrived at location: ", arrivedAtLocation, ", which is angle: ", landingAngle * radiansToDegrees)
         
         print("character landing (angle / 360): ", (landingAngle * radiansToDegrees) / 360)
         
-        
-       //  print("character landing (angle / 360) after adjust negative: ", (landingAngle * radiansToDegrees) / 360)
-        
-        
-        var landingAngleLocation = ((landingAngle  * radiansToDegrees) ) / 360
+        let landingAngleLocation = ((landingAngle  * radiansToDegrees) ) / 360
         
         
-        //MARK: This isn't working right...
-        
-        print("character using landingAngleLocation: ", landingAngleLocation)
-        
-        
-        
-       // var playerXLoc = (planetCircumferance ) - (Int( arrivedAtLocation * CGFloat(planetCircumferance + 1)) )
         var roundingFactor = CGFloat(0.5)
+        
         if landingAngle < 0
         {
             roundingFactor = -roundingFactor
         }
         
         print("character roundingFactor: ", roundingFactor)
-        var playerXLoc = (Int(landingAngleLocation * CGFloat(planetCircumferance) + roundingFactor))
-        // var playerXLoc = (planetCircumferance + 1  ) - (Int(landingAngleLocation) * (planetCircumferance))
-//        if arrivedAtLocation <= 0
-//        {
-//            playerXLoc += 1
-//        }
-        
-        print("character location before adjusting for wrap: ", playerXLoc)
+        let playerXLoc = (Int(landingAngleLocation * CGFloat(planetCircumferance) + roundingFactor))
+  
         
         playerPosition.x =  adjustForWrap(x: playerXLoc)
-        
-        
-        
-        
-        print("character Postion after landing: ", playerPosition,", and before wrap: ", playerXLoc)
-        
-        print("planet color: ", planetColor)
+
         let background = SKSpriteNode(imageNamed: "purple")
         if scene != nil
         {
@@ -185,17 +161,6 @@ class GameScene: SKScene {
         let distance =  CGFloat(distanceFromCenter(x: Int(playerPosition.x), y: Int(playerPosition.y)))
         
         player.zRotation = -distance * (.pi / 3) / CGFloat(planetCircumferance)
-        
-        //        if distance != 0
-        //        {
-        //            player.zRotation = -distance * (.pi / 3) / CGFloat(planetCircumferance)
-        //           // player.zRotation =  -(.pi / 3) / (CGFloat(planetCircumferance) / distance)
-        //        }
-        //        else
-        //        {
-        //            player.zRotation = 0
-        //        }
-       // print("player rotation: ", player.zRotation)
         
     }
     
@@ -288,7 +253,6 @@ class GameScene: SKScene {
             // print("start Ship animation")
             let tiltRight = SKAction.rotate(byAngle: 0.1, duration: 0.25)
             let delay = SKAction.wait(forDuration: 0.05)
-            //  let tiltLeft = SKAction.rotate(byAngle: -0.1, duration: 0.25)
             
             land.run(SKAction.repeatForever(SKAction.sequence([tiltRight, tiltRight.reversed(), delay, tiltRight.reversed(), tiltRight, delay])))
             
@@ -331,9 +295,6 @@ class GameScene: SKScene {
         
         let tile = SKSpriteNode(imageNamed:"dirt_grass")
         tile.setScale(tileScale)
-        
-        //let dirt = SKSpriteNode(imageNamed: "gravel_dirt")
-        //dirt.setScale(tileScale)
         
         var displayX:Int
         
@@ -588,10 +549,6 @@ class GameScene: SKScene {
                 if !flying
                 {
                     animateWalkingPlayer()
-                    //                    let movePlayerAction = SKAction.move(to: position, duration: 0.25)
-                    //                    let animate = SKAction.animate(with: playerWalkingFrames, timePerFrame: 0.1, resize: false, restore: true)
-                    //                    player.run(animate, withKey: "walking")
-                    //                    player.run(.sequence([movePlayerAction, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "moving")
                 }
                 else
                 {
@@ -606,13 +563,6 @@ class GameScene: SKScene {
                 rotatePlayer()
             }
         }
-        
-        //        if canJump.contains(planetMap[Int(playerPosition.x)][Int(playerPosition.y) + 1])
-        //        {
-        //            falling = true
-        //            print("falling in move...")
-        //            moveDown()
-        //        }
         
     }
     
@@ -673,16 +623,11 @@ class GameScene: SKScene {
             let rotateAction = SKAction.rotate(toAngle: 0.0, duration: 0.15, shortestUnitArc: true)
             player.run(rotateAction)
             
-            //player.zRotation = 0
-            
             if let position = findPositionofMapLocation(x: playerPosition.x, y: playerPosition.y)
             {
                 let movePlayerAction = SKAction.move(to: position, duration: 0.25)
                 player.run(movePlayerAction, withKey: "moving")
             }
-            
-            // drawPlanetCenteredAt(x: playerPosition.x, y: playerPosition.y)
-            //placePlayer()
         }
         
         if flying && targetNode.name == "down" && !downBegan && (player.action(forKey: "moving") == nil)
@@ -725,8 +670,6 @@ class GameScene: SKScene {
                 player.run(movePlayerAction, withKey: "moving")
             }
             
-            // drawPlanetCenteredAt(x: playerPosition.x, y: playerPosition.y)
-            // placePlayer()
         }
         
     }
@@ -763,9 +706,7 @@ class GameScene: SKScene {
             {
                 return
             }
-            
-            
-            
+      
             if blocked.contains(planetMap[Int(playerPosition.x)][Int(playerPosition.y - 1)])
             {
                 let movePlayerAction = SKAction.move(by: CGVector(dx: 0.0, dy: 8.0), duration: 0.1)
@@ -778,7 +719,7 @@ class GameScene: SKScene {
             
             let currentCharacter = planetMap[Int(playerPosition.x)][Int(playerPosition.y)]
             
-            if canJump.contains(currentCharacter) //currentCharacter == " " || currentCharacter == "r" || currentCharacter == "^" || currentCharacter == "p"
+            if canJump.contains(currentCharacter) 
             {
                 
                 if planetMap[playerPosition.x][playerPosition.y] == "^"
@@ -806,13 +747,9 @@ class GameScene: SKScene {
             }
             else
             {
-                
-                
                 playerPosition.y -= 1
                 animateWalkingPlayer()
-                
             }
-            
         }
         
         
@@ -934,8 +871,6 @@ class GameScene: SKScene {
         
         let playerbounce = SKAction.move(by: CGVector(dx: 0.0, dy: 4.0), duration: 0.05)
         
-        // let animate = SKAction.animate(with: playerWalkingFrames, timePerFrame: 0.1, resize: false, restore: true)
-        
         if falling && !flying
         {
             if (player.action(forKey: "falling") == nil)
@@ -965,13 +900,10 @@ class GameScene: SKScene {
         {
             if (player.action(forKey: "falling") == nil)
             {
-                //  let usePosition = findPositionofMapLocation(x: playerPosition.x, y: playerPosition.y)!
-                //  let movePlayerActionVertical = SKAction.move(to: usePosition, duration: 0.15)                //player.run(animate, withKey: "walking")
+              
                 if !flying
                 {
                     animateWalkingPlayer()
-                    //                    animatePlayer()
-                    //                    player.run(.sequence([delay, movePlayerActionVertical, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "moving")
                 }
             }
         }
@@ -1019,9 +951,7 @@ class GameScene: SKScene {
         let tile = SKSpriteNode(imageNamed:"dirt_grass")
         tile.setScale(tileScale)
         
-        //yPos +=  (mapCenteredLocY - 3) * Int(tile.size.height)
         let adjustYForCenter = y - (mapCenteredLocY - 3) * Int(tile.size.height)
-        // print("y: ", y, ", adjustedY: ", adjustYForCenter)
         
         let yAdjust = -((abs(adjustedDisplayX) * 2) + ((adjustedDisplayX * adjustedDisplayX) / 4))
         let xPos = CGFloat(adjustedDisplayX) * (tile.size.width)
@@ -1039,7 +969,6 @@ class GameScene: SKScene {
         tile.setScale(tileScale)
         
         var xAdjustment = -(x / tile.size.width)
-        // print("unrounded xAdjustment: ", xAdjustment)
         
         if xAdjustment < 0
         {
@@ -1052,19 +981,14 @@ class GameScene: SKScene {
         
         var useX = ( Int(mapCenteredLocX - Int(xAdjustment)))
         
-        //print("useX before adjustments: ", useX)
-        
         while useX >= planetCircumferance
         {
-            // print("subtracted from useX")
             useX -= (planetCircumferance + 1)
         }
         
         while useX < 0
         {
-            //print("added to useX")
             useX += planetCircumferance + 1
-            
         }
         
         let adjustedi = xAdjustment
@@ -1098,8 +1022,6 @@ class GameScene: SKScene {
             actualY = 0
         }
         
-        // print("location returned X: ", useX, ", ", Int(actualY) + 1)
-        
         return  (useX ,Int(actualY) + 1)
         
     }
@@ -1114,14 +1036,13 @@ class GameScene: SKScene {
         
         counter += 1
         
-        if (player.action(forKey: "moving") == nil)
+        if (player.action(forKey: "moving") == nil) && !flying
         {
-            // player.texture = SKTexture(imageNamed: "p1_stand")
+            player.texture = SKTexture(imageNamed: "p1_stand")  //MARK: maybe remove?
         }
         
         let playerDistanceFromCenter = distanceFromCenter(x: Int(playerPosition.x), y: Int(playerPosition.y))
         if  recentered && counter >= 30
-            //  recentered && counter >= 1000 // && (player.action(forKey: "falling") == nil) && (player.action(forKey: "moving") == nil) && !falling && counter >= 1000
         {
             print("centering in update")
             counter = 28
@@ -1131,7 +1052,6 @@ class GameScene: SKScene {
                 recentered = false
             }
             let moveBy = playerDistanceFromCenter.signum()
-            // print("adjusting by: ",distanceFromCenter(x: Int(playerPosition.x), y: Int(playerPosition.y)).signum())
             moveDisplay(by: moveBy)
             
         }
@@ -1154,7 +1074,6 @@ class GameScene: SKScene {
             
             
         }
-       // print("player Rotation in update: ", player.zRotation)
         
         if canJump.contains(planetMap[playerPosition.x][playerPosition.y + 1]) && (player.action(forKey: "falling") == nil) && (player.action(forKey: "moving") == nil)
         {
