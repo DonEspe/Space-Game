@@ -31,22 +31,29 @@ class SpaceScene: SKScene
     
     var playerPosition = (x: 20, y: 2)
     
-    var planet = SKSpriteNode(imageNamed: "meteorBrown_big4")
+    var planetLeft = "planet 0"
+    var planetLeftSize = 50
+    var planetLeftPosition = 25
+    
+    var planetCounter = 0
+    
+    var asteroid = SKSpriteNode(imageNamed: "meteorBrown_big4")
     
     let background = SKSpriteNode(imageNamed: "darkPurple")
-     let cameraNode = SKCameraNode()
+    //let cameraNode = SKCameraNode()
+    
     
     override func didMove(to view: SKView)
     {
         print("entered space scene")
-       
+        
         if scene != nil
         {
             background.size = CGSize(width: scene!.frame.width , height: scene!.frame.height * 2.0)
             print("background size: ", background.size)
-            cameraNode.position = background.position // CGPoint(x: scene!.size.width / 2, y: scene!.size.height / 2)
-            scene!.addChild(cameraNode)
-            scene!.camera = cameraNode
+            // cameraNode.position = background.position // CGPoint(x: scene!.size.width / 2, y: scene!.size.height / 2)
+            // scene!.addChild(cameraNode)
+            //scene!.camera = cameraNode
             
         }
         
@@ -54,18 +61,63 @@ class SpaceScene: SKScene
         background.name = "background"
         addChild(background)
         
+        asteroid.zPosition = 9
+        asteroid.position = CGPoint(x: 100, y: -175)
+        asteroid.name = "asteroid"
+        addChild(asteroid)
+        
+        makePlanet(at: CGPoint(x: -200.0,y: -175.0), ofRadius: 60, color: .brown)
+        makePlanet(at: CGPoint(x: -300.0,y: 120), ofRadius: 35, color: .blue)
+        
         player = SKSpriteNode(imageNamed: "playerShip1_blue")
         player.setScale(0.4)
         player.zPosition = 10
-        player.position =  CGPoint(x: 0, y: 0)
+        print("planet Left: ", planetLeft)
+        
+        var angle = player.zRotation
+        
+        if let planet = childNode(withName: "*" + planetLeft + "*")
+        {
+            print("using planet: ", planet.name!)
+            let planetRadius = planet.frame.width / 2
+            
+            let planetSize = planetRadius + (self.player.frame.height / 2.0 + 5) // 25.0 // 15 is just an added buffer
+            
+            let relativeLocation = CGFloat(planetLeftPosition) / (CGFloat(planetLeftSize) + 1)
+            
+            let angleOnPlanet = relativeLocation * 360.0
+            
+            print("planetSize: ", planetSize,", relative Location: ", relativeLocation,", angle on planet: ", angleOnPlanet)
+            
+            
+            
+//            self.player.position = planet.position
+//            self.player.position.y += planetSize
+            
+            self.player.position.x = planetSize * sin(angleOnPlanet * degreesToRadians) + planet.position.x
+            self.player.position.y = planetSize * cos(angleOnPlanet * degreesToRadians) + planet.position.y
+            
+            
+            print("setting angle to planet")
+            angle = atan2(self.player.position.x - planet.position.x, planet.position.y - self.player.position.y)
+            print("angle in let: ", angle)
+            
+            
+            
+        }
+        print("angle out of let: ", -angle * radiansToDegrees)
+        playerAngle = angle * radiansToDegrees + 180
+        
+        player.zRotation = -angle
+        
+        //        let rotateAction = SKAction.rotate(toAngle: angle - (.pi / 4.0), duration: 0.0)
+        //        player.run(rotateAction)
+        
+        //player.position = CGPoint(x: 0, y: 0)
         player.name = "player"
+        print("player position: ", player.position)
         
         addChild(player)
-        
-        planet.zPosition = 9
-        planet.position = CGPoint(x: 100, y: -175)
-        planet.name = "planet"
-        addChild(planet)
         
         buildUI()
     }
@@ -100,67 +152,71 @@ class SpaceScene: SKScene
         
     }
     
-   override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
     {
         let touch = touches.first as UITouch?
         let touchLocation = touch?.location(in: self)
-        let targetNode = atPoint(touchLocation!) as! SKSpriteNode
-        
+        let targetNode = atPoint(touchLocation!)
         for press in touches
         {
             print("press: ", press)
         }
         
-        if targetNode.name == "up"
+        switch targetNode.name
         {
-            print("pushing up")
-           // playerVelocity += 1//  .dy += 1
-            pushingUp = true
-            pushingDown = false
-            pushingRight = false
-            pushingLeft = false
-        }
-        
-        if targetNode.name == "down"
-        {
-            print("pushing down")
-           // playerVelocity -= 1 //.dy -= 1
-            pushingDown = true
-            pushingUp = false
-            pushingRight = false
-            pushingLeft = false        }
-        
-        if targetNode.name == "left"
-        {
-            print("pushing left")
-            //playerVelocity.dx -= 1
-           // playerAngle += 10
-            pushingLeft = true
-            pushingUp = false
-            pushingDown = false
-            pushingRight = false
-           
+            case "up":
+                
+                
+                
+                print("pushing up")
+                // playerVelocity += 1//  .dy += 1
+                pushingUp = true
+                pushingDown = false
+                pushingRight = false
+                pushingLeft = false
             
+            case "down":
+                
+                print("pushing down")
+                // playerVelocity -= 1 //.dy -= 1
+                pushingDown = true
+                pushingUp = false
+                pushingRight = false
+                pushingLeft = false
+            
+            case "left":
+                
+                print("pushing left")
+                //playerVelocity.dx -= 1
+                // playerAngle += 10
+                pushingLeft = true
+                pushingUp = false
+                pushingDown = false
+                pushingRight = false
+            
+            case "right":
+                
+                
+                print("pushing right")
+                // playerVelocity.dx += 1
+                // playerAngle -= 10
+                pushingRight = true
+                pushingLeft = false
+                pushingUp = false
+                pushingDown = false
+            
+            case "background":
+                
+                pushingRight = false
+                pushingLeft = false
+                pushingUp = false
+                pushingDown = false
+            
+            default:
+                print("touches began - undefined")
+                break
         }
         
-        if targetNode.name == "right"
-        {
-            print("pushing right")
-           // playerVelocity.dx += 1
-           // playerAngle -= 10
-            pushingRight = true
-            pushingLeft = false
-            pushingUp = false
-            pushingDown = false
-        }
-            
-        if targetNode.name == "background"
-        {
-            pushingRight = false
-            pushingLeft = false
-            pushingUp = false
-            pushingDown = false
-        }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)
@@ -175,29 +231,29 @@ class SpaceScene: SKScene
         
         let touch = touches.first as UITouch?
         let touchLocation = touch?.location(in: self)
-        let targetNode = atPoint(touchLocation!) as! SKSpriteNode
+        let targetNode = atPoint(touchLocation!)// as! SKSpriteNode
         
         switch targetNode.name
             
         {
             case "up":
-            print("let off up")
-            pushingUp = false
+                print("let off up")
+                pushingUp = false
             
             case "down":
-            print("let off down")
-            pushingDown = false
+                print("let off down")
+                pushingDown = false
             
             case "left":
-            print("let off left")
-            pushingLeft = false
+                print("let off left")
+                pushingLeft = false
             
             case "right":
-            print("let off right")
-            pushingRight = false
+                print("let off right")
+                pushingRight = false
             
             default:
-            print("let off undefined node")
+                print("let off undefined node")
         }
     }
     
@@ -205,19 +261,19 @@ class SpaceScene: SKScene
     {
         if pushingRight
         {
-            print("still pushing right")
+            //print("still pushing right")
         }
         if pushingLeft
         {
-            print("still pushing left")
+           // print("still pushing left")
         }
         if pushingUp
         {
-            print("still pushing up")
+           // print("still pushing up")
         }
         if pushingDown
         {
-            print("still pushing down")
+           // print("still pushing down")
         }
         
     }
@@ -266,7 +322,7 @@ class SpaceScene: SKScene
         if position.x > self.size.width / 2 - player.frame.width / 2
         {
             // print("out on the right of the screen")
-           return false
+            return false
             
         }
         if position.y > self.frame.height / 2 - player.frame.height / 2
@@ -280,6 +336,43 @@ class SpaceScene: SKScene
             return false
         }
         return true
+    }
+    
+    func makePlanet(at: CGPoint, ofRadius: CGFloat, color: SKColor)
+    {
+        let circle = SKShapeNode(circleOfRadius: ofRadius ) // Size of Circle = Radius setting.
+        circle.position = at  //touch location passed from touchesBegan.
+        
+        circle.name = "planet " + String(planetCounter)
+        planetCounter += 1
+        // circle.strokeColor = SKColor.brown
+        // circle.glowWidth = 1.0
+        circle.fillColor = color
+        circle.zPosition = 14
+        self.addChild(circle)
+        
+    }
+    
+    //func landOnPlanet(name: String)
+    func landOnPlanet(planet: SKNode)
+    {
+        let gameScene = GameScene(fileNamed: "GameScene")!
+        gameScene.size = CGSize(width: 1334, height: 750)
+        gameScene.scaleMode = .aspectFit
+        gameScene.planetName =  planet.name ?? ""
+        
+        let angle = atan2(self.player.position.x - planet.position.x, self.player.position.y - planet.position.y)
+        
+        let decimalLocation = (angle ) / (2 * .pi)
+        
+        print("character landing location angle: ", angle,", decimalLocation: ", decimalLocation)
+        
+        gameScene.arrivedAtLocation = decimalLocation
+        gameScene.landingAngle = angle
+
+
+        //  spaceScene.anchorPoint = scene?.anchorPoint as! CGPoint //CGPoint(x: 0.5, y: 0.7)
+        scene?.view?.presentScene(gameScene)
     }
     
     
@@ -307,7 +400,7 @@ class SpaceScene: SKScene
             if pushingLeft
             {
                 playerAngleVelocity += 1
-                 print("pushing left playerangleVelocity: ", playerAngleVelocity)
+                print("pushing left playerangleVelocity: ", playerAngleVelocity)
                 if playerAngleVelocity > angleMax
                 {
                     playerAngleVelocity = angleMax
@@ -327,19 +420,19 @@ class SpaceScene: SKScene
             
             if !pushingUp && !pushingDown && playerVelocity != 0
             {
-               //  print("sign of player Velocity: ", CGFloat(Int(playerVelocity).signum()))
+                //  print("sign of player Velocity: ", CGFloat(Int(playerVelocity).signum()))
                 
-               // playerVelocity -=  CGFloat(Int(playerVelocity).signum())
+                // playerVelocity -=  CGFloat(Int(playerVelocity).signum())
             }
             
             if !pushingRight && !pushingLeft && playerAngleVelocity != 0
             {
-               // print("sign of player angle Velocity: ", CGFloat(Int(playerAngleVelocity).signum()))
+                // print("sign of player angle Velocity: ", CGFloat(Int(playerAngleVelocity).signum()))
                 playerAngleVelocity -= CGFloat(Int(playerAngleVelocity).signum())
             }
             
         }
- 
+        
         if playerAngle < 0
         {
             playerAngle += 360
@@ -352,77 +445,68 @@ class SpaceScene: SKScene
         
         playerAngle += playerAngleVelocity
         
+        self.enumerateChildNodes(withName: "planet*", using: ({(planet, error) in
+            let planetRadius = planet.frame.width / 2
+            //print("planet radius: ", planetRadius)
+            let planetSize = planetRadius -  1 //(self.player.frame.height / 2.0) // 5 is just an added buffer
+            
+            if abs(self.player.position.x - planet.position.x) < planetSize && abs(self.player.position.y - planet.position.y) < planetSize
+            {
+                print("in planet - do stuff")
+                print("landing on planet: ", planet.name)
+                
+               // self.landOnPlanet(name: planet.name ?? "")
+                self.landOnPlanet(planet: planet)
+            }
+            
+        }))
         
-       // print("player x:, ", player.position.x,", y: ", player.position.y)
+        
+        // print("player x:, ", player.position.x,", y: ", player.position.y)
         
         if !isLocationOnScreen(position: player.position)  && counter > 5
         {
             counter = 0
             print("off screen - need to adjust view")
-//            let zoomOutAction = SKAction.scale(to: 2.0, duration: 1)
-//            cameraNode.run(zoomOutAction)
+            //            let zoomOutAction = SKAction.scale(to: 2.0, duration: 1)
+            //            cameraNode.run(zoomOutAction)
             
             let changeInX = -player.position.x / 2
             let changeInY = -player.position.y / 2
             
-            let movePlanet = SKAction.move(to: CGPoint(x: planet.position.x + changeInX, y: planet.position.y + changeInY), duration: 0.2)
+            let movePlanet = SKAction.move(to: CGPoint(x: asteroid.position.x + changeInX, y: asteroid.position.y + changeInY), duration: 0.2)
             counter = -20
-            planet.run(movePlanet)
+            asteroid.run(movePlanet)
+            
+            
+            self.enumerateChildNodes(withName: "planet*", using: ({
+                (planet, error) in
+                let movePlanet = SKAction.move(to: CGPoint(x: planet.position.x + changeInX, y: planet.position.y + changeInY), duration: 0.2)
+                planet.run(movePlanet)
+            }))
             
             //planet.position.x += changeInX
-           // planet.position.y += changeInY
+            // planet.position.y += changeInY
             
             let movePlayer = SKAction.move(to: CGPoint(x: player.position.x + changeInX, y: player.position.y + changeInY), duration: 0.2)
             player.run(movePlayer)
             
-           //player.position = CGPoint(x: player.position.x + changeInX, y: player.position.y + changeInY)
+            //player.position = CGPoint(x: player.position.x + changeInX, y: player.position.y + changeInY)
             
             
         }
         
-//        if player.position.x < -self.size.width / 2 + player.frame.width / 2
-//        {
-//          //  print("out on the left of the screen")
-//            player.position.x = -self.size.width / 2 + player.frame.width / 2
-//            playerVelocity = 0
-//            playerAngleVelocity = 0
-//
-//        }
-//        if player.position.x > self.size.width / 2 - player.frame.width / 2
-//        {
-//           // print("out on the right of the screen")
-//            player.position.x = self.size.width / 2 - player.frame.width / 2
-//            playerVelocity = 0
-//            playerAngleVelocity = 0
-//
-//        }
-//        if player.position.y > self.frame.height / 2 - player.frame.height / 2
-//        {
-//           // print("out on the top of the screen")
-//            player.position.y = self.frame.height / 2 - player.frame.height / 2
-//            playerVelocity = 0
-//            playerAngleVelocity = 0
-//            //worked
-//        }
-//        if player.position.y <  -self.frame.height / 2 + player.frame.height / 2
-//        {
-//           // print("out on the bottom of the screen")
-//            player.position.y = -self.frame.height / 2 + player.frame.height / 2
-//            playerVelocity = 0
-//            playerAngleVelocity = 0
-//            //worked
-//        }
         
         player.zRotation = playerAngle * degreesToRadians
-
+        
         player.position = CGPoint(x:player.position.x - sin(player.zRotation) * playerVelocity / 2.0,y:player.position.y + cos(player.zRotation) * playerVelocity / 2.0)
         
         showActiveTouches()
         
-       // let angle = atan2(playerVelocity.dy, playerVelocity.dx)
-       // player.zRotation = angle - .pi / 2.0
+        // let angle = atan2(playerVelocity.dy, playerVelocity.dx)
+        // player.zRotation = angle - .pi / 2.0
         
-       
+        
         
         
     }

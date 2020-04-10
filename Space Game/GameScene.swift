@@ -17,14 +17,15 @@ var playerPosition = (x: 24, y: 2)
 let displaytileHeight = 15
 let displaytileWidth = 26 // will add one for center I believe
 
-
 class GameScene: SKScene {
     
-    private var label : SKLabelNode?
-    private var spinnyNode : SKShapeNode?
+    let degreesToRadians = CGFloat.pi / 180
+    let radiansToDegrees = 180 / CGFloat.pi
     
+    var planetName = "planet 0"
     
-    
+    var planetBlend = CGFloat(1)
+    var planetColor = SKColor.blue
     
     var counter = 0
     var recentered = false
@@ -49,12 +50,78 @@ class GameScene: SKScene {
     
     var downBegan = false
     
+    var arrivedAtLocation = CGFloat(0)
+    var landingAngle = CGFloat(0)
+    
     
     private var player = SKSpriteNode()
     private var playerWalkingFrames: [SKTexture] = []
     
     override func didMove(to view: SKView)
     {
+        print("didMove to view called")
+        print("test data is: ", planetName)
+        planetBlend = 0
+        planetColor = .clear
+        
+        if planetName.contains("1")
+        {
+            print("planet 1")
+            planetColor = .cyan
+            planetBlend = 1//0.5
+            flying = true
+        }
+        
+        if planetName.contains("0")
+        {
+            print("planet 0")
+            planetColor = .red
+            planetBlend = 1
+            flying = true
+        }
+        
+        print("character arrived at location: ", arrivedAtLocation, ", which is angle: ", landingAngle * radiansToDegrees)
+        
+        print("character landing (angle / 360): ", (landingAngle * radiansToDegrees) / 360)
+        
+        
+       //  print("character landing (angle / 360) after adjust negative: ", (landingAngle * radiansToDegrees) / 360)
+        
+        
+        var landingAngleLocation = ((landingAngle  * radiansToDegrees) ) / 360
+        
+        
+        //MARK: This isn't working right...
+        
+        print("character using landingAngleLocation: ", landingAngleLocation)
+        
+        
+        
+       // var playerXLoc = (planetCircumferance ) - (Int( arrivedAtLocation * CGFloat(planetCircumferance + 1)) )
+        var roundingFactor = CGFloat(0.5)
+        if landingAngle < 0
+        {
+            roundingFactor = -roundingFactor
+        }
+        
+        print("character roundingFactor: ", roundingFactor)
+        var playerXLoc = (Int(landingAngleLocation * CGFloat(planetCircumferance) + roundingFactor))
+        // var playerXLoc = (planetCircumferance + 1  ) - (Int(landingAngleLocation) * (planetCircumferance))
+//        if arrivedAtLocation <= 0
+//        {
+//            playerXLoc += 1
+//        }
+        
+        print("character location before adjusting for wrap: ", playerXLoc)
+        
+        playerPosition.x =  adjustForWrap(x: playerXLoc)
+        
+        
+        
+        
+        print("character Postion after landing: ", playerPosition,", and before wrap: ", playerXLoc)
+        
+        print("planet color: ", planetColor)
         let background = SKSpriteNode(imageNamed: "purple")
         if scene != nil
         {
@@ -68,7 +135,7 @@ class GameScene: SKScene {
         addStars()
         planetBuilder.buildPlanetMap(planetCircumferance: planetCircumferance)
         drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
-        planetBuilder.printMap()
+       // planetBuilder.printMap()
         
         buildUI()
         
@@ -128,7 +195,7 @@ class GameScene: SKScene {
         //        {
         //            player.zRotation = 0
         //        }
-        print("player rotation: ", player.zRotation)
+       // print("player rotation: ", player.zRotation)
         
     }
     
@@ -205,6 +272,8 @@ class GameScene: SKScene {
         land.zPosition = 10
         land.position =  CGPoint(x: x, y: y)
         land.name = "land:" + type
+        land.color = planetColor
+        land.colorBlendFactor = planetBlend
         
         if type.contains("ufo")
         {
@@ -588,9 +657,12 @@ class GameScene: SKScene {
             {
                 playerPosition.y = 0
                 
-                let spaceScene = GameScene(fileNamed: "SpaceScene")!
+                let spaceScene = SpaceScene(fileNamed: "SpaceScene")!
                 spaceScene.size = CGSize(width: 1334, height: 750)
                 spaceScene.scaleMode = .aspectFit
+                spaceScene.planetLeft = planetName
+                spaceScene.planetLeftSize = planetCircumferance
+                spaceScene.planetLeftPosition = playerPosition.x
               //  spaceScene.anchorPoint = scene?.anchorPoint as! CGPoint //CGPoint(x: 0.5, y: 0.7)
                 scene?.view?.presentScene(spaceScene)
             }
@@ -623,7 +695,7 @@ class GameScene: SKScene {
                 print("landing")
                 //player.removeAllActions()
                 player.zRotation = 0
-                print("player rotation in landing: ", player.zRotation)
+               // print("player rotation in landing: ", player.zRotation)
                 flying = false
                 onLand = true
                 planetMap[playerPosition.x][playerPosition.y] = "^"
@@ -739,16 +811,6 @@ class GameScene: SKScene {
                 playerPosition.y -= 1
                 animateWalkingPlayer()
                 
-                //                let position = findPositionofMapLocation(x: playerPosition.x, y: playerPosition.y)!
-                //                if !flying
-                //                {
-                //                    let movePlayerAction = SKAction.move(to: position, duration: 0.25)
-                //                    let animate = SKAction.animate(with: playerWalkingFrames, timePerFrame: 0.1, resize: false, restore: true)
-                //                    player.run(animate, withKey: "walking")
-                //                    player.run(.sequence([movePlayerAction, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "moving")
-                //
-                //                }
-                
             }
             
         }
@@ -779,7 +841,7 @@ class GameScene: SKScene {
                 
                 let mapLocation = mapLocationPressed(x: targetNode.position.x, y: targetNode.position.y)
                 //  print("location clicked: ", mapLocation)
-                print("character at map location is: ", planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY])
+                print("character at map location ", mapLocation," is: ", planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY])
                 planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY] = " " //"B"
                 
                 if canJump.contains(planetMap[Int(playerPosition.x)][Int(playerPosition.y) + 1]) && !flying
@@ -798,7 +860,7 @@ class GameScene: SKScene {
                     
                     // print("item is land:")
                     let mapLocation = mapLocationPressed(x: targetNode.position.x, y: targetNode.position.y) // targetNode.position.x, y: targetNode.position.y)
-                    print("character at map location is: ", planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY])
+                    print("character at map location ", mapLocation," is: ", planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY])
                 }
                 
             }
@@ -838,19 +900,6 @@ class GameScene: SKScene {
     
     func moveDown()
     {
-        
-        //        if flying && cantFallThrough.contains(planetMap[playerPosition.x][playerPosition.y + 1])
-        //        {
-        //            print("landing")
-        //            flying = false
-        //            onLand = true
-        //            planetMap[playerPosition.x][playerPosition.y] = "^"
-        //            player.texture = SKTexture(imageNamed: "p1_stand.png")
-        //            drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
-        //            placePlayer()
-        //            return
-        //        }
-        
         
         if downBegan
         {
@@ -1105,7 +1154,7 @@ class GameScene: SKScene {
             
             
         }
-        print("player Rotation in update: ", player.zRotation)
+       // print("player Rotation in update: ", player.zRotation)
         
         if canJump.contains(planetMap[playerPosition.x][playerPosition.y + 1]) && (player.action(forKey: "falling") == nil) && (player.action(forKey: "moving") == nil)
         {
