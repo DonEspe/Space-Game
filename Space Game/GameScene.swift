@@ -22,7 +22,7 @@ class GameScene: SKScene {
     let degreesToRadians = CGFloat.pi / 180
     let radiansToDegrees = 180 / CGFloat.pi
     
-    var planetName = "planet 0"
+    var planetName = "planet 2"
     
     var planetBlend = CGFloat(1)
     var planetColor = SKColor.blue
@@ -52,6 +52,8 @@ class GameScene: SKScene {
     
     var landingAngle = CGFloat(0)
     
+    var landedFillColor = SKColor(ciColor: .white)
+    
     
     private var player = SKSpriteNode()
     private var playerWalkingFrames: [SKTexture] = []
@@ -63,18 +65,28 @@ class GameScene: SKScene {
         planetBlend = 0
         planetColor = .clear
         
-        if planetName.contains("1")
-        {
-            print("planet 1")
-            planetColor = .cyan
-            planetBlend = 1//0.5
-            flying = true
-        }
+//        if planetName.contains("1")
+//        {
+//            print("planet 1")
+//           // planetColor = .cyan
+//            planetColor = landedFillColor
+//            planetBlend = 1//0.5
+//            flying = true
+//        }
+//
+//        if planetName.contains("0")
+//        {
+//            print("planet 0")
+//          //  planetColor = .red
+//            planetColor = landedFillColor
+//            planetBlend = 1
+//            flying = true
+//        }
         
-        if planetName.contains("0")
+        if planetName.contains("planet")
         {
-            print("planet 0")
-            planetColor = .red
+            print("planet: ", planetName)
+            planetColor = landedFillColor
             planetBlend = 1
             flying = true
         }

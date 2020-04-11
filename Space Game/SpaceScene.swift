@@ -68,6 +68,7 @@ class SpaceScene: SKScene
         
         makePlanet(at: CGPoint(x: -200.0,y: -175.0), ofRadius: 60, color: .brown)
         makePlanet(at: CGPoint(x: -300.0,y: 120), ofRadius: 35, color: .blue)
+        makePlanet(at: CGPoint(x:100, y: 200), ofRadius: 75, color: .green)
         
         player = SKSpriteNode(imageNamed: "playerShip1_blue")
         player.setScale(0.4)
@@ -79,19 +80,22 @@ class SpaceScene: SKScene
         if let planet = childNode(withName: "*" + planetLeft + "*")
         {
             print("using planet: ", planet.name!)
-            let planetRadius = planet.frame.width / 2
+            let planetRadius = planet.frame.width / 2 + 2.0
             
-            let planetSize = planetRadius + (self.player.frame.height / 2.0 + 5) // 25.0 // 15 is just an added buffer
+            let usePlayerSize = max(self.player.frame.height, self.player.frame.width)
+            
+            let planetSize = planetRadius + (usePlayerSize / 2.0) + 3.0 // 25.0 // 15 is just an added buffer
             
             let relativeLocation = CGFloat(planetLeftPosition) / (CGFloat(planetLeftSize) + 1)
             
             let angleOnPlanet = relativeLocation * 360.0
             
             print("planetSize: ", planetSize,", relative Location: ", relativeLocation,", angle on planet: ", angleOnPlanet)
+            print("change in position from planet x: ",planetSize * sin(angleOnPlanet * degreesToRadians), ", y:", planetSize * cos(angleOnPlanet * degreesToRadians))
+            print("planet location: ", planet.position)
             
             self.player.position.x = planetSize * sin(angleOnPlanet * degreesToRadians) + planet.position.x
             self.player.position.y = planetSize * cos(angleOnPlanet * degreesToRadians) + planet.position.y
-            
             
             print("setting angle to planet")
             angle = atan2(self.player.position.x - planet.position.x, planet.position.y - self.player.position.y)
@@ -335,6 +339,8 @@ class SpaceScene: SKScene
         circle.position = at  //touch location passed from touchesBegan.
         
         circle.name = "planet " + String(planetCounter)
+        circle.fillTexture = SKTexture(imageNamed: "gravel_dirt")
+        circle.alpha = 0.6
         planetCounter += 1
         // circle.strokeColor = SKColor.brown
         // circle.glowWidth = 1.0
@@ -345,7 +351,7 @@ class SpaceScene: SKScene
     }
     
     //func landOnPlanet(name: String)
-    func landOnPlanet(planet: SKNode)
+    func landOnPlanet(planet: SKShapeNode)
     {
         let gameScene = GameScene(fileNamed: "GameScene")!
         gameScene.size = CGSize(width: 1334, height: 750)
@@ -355,6 +361,7 @@ class SpaceScene: SKScene
         let angle = atan2(self.player.position.x - planet.position.x, self.player.position.y - planet.position.y)
         
         gameScene.landingAngle = angle
+        gameScene.landedFillColor = planet.fillColor
         
         scene?.view?.presentScene(gameScene)
     }
@@ -432,15 +439,25 @@ class SpaceScene: SKScene
         self.enumerateChildNodes(withName: "planet*", using: ({(planet, error) in
             let planetRadius = planet.frame.width / 2
             //print("planet radius: ", planetRadius)
-            let planetSize = planetRadius -  1 //(self.player.frame.height / 2.0) // 5 is just an added buffer
+            let usePlayerSize = min(self.player.frame.height, self.player.frame.width)
+            let planetSize = planetRadius + usePlayerSize / 2 // (self.player.frame.height / 2.0) // 5 is just an added buffer
             
-            if abs(self.player.position.x - planet.position.x) < planetSize && abs(self.player.position.y - planet.position.y) < planetSize
+            let changeInX = self.player.position.x - planet.position.x
+            let changeInY = self.player.position.y - planet.position.y
+            
+            let distanceFromPlanet = sqrt( changeInX * changeInX + changeInY * changeInY)
+            
+           // if abs(self.player.position.x - planet.position.x) < planetSize && abs(self.player.position.y - planet.position.y) < planetSize
+                
+            if distanceFromPlanet < planetSize
             {
                 print("in planet - do stuff")
                 print("landing on planet: ", planet.name ?? "Unknown")
                 
-                self.landOnPlanet(planet: planet)
+                self.landOnPlanet(planet: planet as! SKShapeNode)  //MARK: need to add back
             }
+            
+          //  print("player size: ", self.player.frame.width,", ",self.player.frame.height)
             
         }))
         
