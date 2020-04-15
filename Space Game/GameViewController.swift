@@ -27,6 +27,7 @@ class GameViewController: UIViewController {
                 //scene.size = view.bounds.size
                 print("anchor point: ", scene.anchorPoint)
                 scene.anchorPoint = CGPoint(x: 0.5, y: 0.7)
+            
                 
                 view.presentScene(scene)
             }

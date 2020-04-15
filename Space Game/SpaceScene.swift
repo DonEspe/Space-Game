@@ -22,6 +22,7 @@ class SpaceScene: SKScene
     var pushingDown = false
     var pushingLeft = false
     var pushingRight = false
+    var throttleTouched = false
     
     var counter = 0
     
@@ -39,8 +40,14 @@ class SpaceScene: SKScene
     
     var asteroid = SKSpriteNode(imageNamed: "meteorBrown_big4")
     
+    var nebula = SKSpriteNode(imageNamed: "nebula")
+    
+    var throttle = SKNode()
+    
     let background = SKSpriteNode(imageNamed: "darkPurple")
     //let cameraNode = SKCameraNode()
+    
+    let fireNode = SKSpriteNode(imageNamed: "fire03")
     
     
     override func didMove(to view: SKView)
@@ -54,6 +61,7 @@ class SpaceScene: SKScene
             // cameraNode.position = background.position // CGPoint(x: scene!.size.width / 2, y: scene!.size.height / 2)
             // scene!.addChild(cameraNode)
             //scene!.camera = cameraNode
+            view.isMultipleTouchEnabled = true
             
         }
         
@@ -65,6 +73,15 @@ class SpaceScene: SKScene
         asteroid.position = CGPoint(x: 100, y: -175)
         asteroid.name = "asteroid"
         addChild(asteroid)
+        
+        nebula.zPosition = 11
+        nebula.position = CGPoint(x: -150, y: 600)
+        nebula.name = "nebula"
+        nebula.alpha = 0.2
+        nebula.color = .blue
+        nebula.colorBlendFactor = 0.7
+        addChild(nebula)
+        
         
         makePlanet(at: CGPoint(x: -200.0,y: -175.0), ofRadius: 60, color: .brown)
         makePlanet(at: CGPoint(x: -300.0,y: 120), ofRadius: 35, color: .blue)
@@ -114,32 +131,53 @@ class SpaceScene: SKScene
         
         addChild(player)
         
+        fireNode.zPosition = 10
+        fireNode.zRotation = player.zRotation
+        fireNode.position = player.position
+        let pulsedRed = SKAction.sequence([
+            SKAction.colorize(with: .red, colorBlendFactor: 0.3, duration: 0.1),
+            SKAction.colorize(withColorBlendFactor: 0, duration: 0.1)])
+        fireNode.run(SKAction.repeatForever( pulsedRed))
+        addChild(fireNode)
+        
         buildUI()
     }
     
     func buildUI()
     {
-        button = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
-        button.position = CGPoint(x:0, y: -170);
+        button = SKSpriteNode(color: .purple, size: CGSize(width: 50, height: 500))
+        button.position = CGPoint(x:-600, y: -75);
         button.zPosition = 35
-        button.name = "up"
+        button.name = "throttleBar"
         self.addChild(button)
         
-        button = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
-        button.position = CGPoint(x:0, y: -230);
-        button.zPosition = 35
-        button.name = "down"
-        self.addChild(button)
+        throttle = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
+        throttle.position = CGPoint(x:-600, y: -300);
+        throttle.zPosition = 35
+        throttle.name = "throttle"
+        self.addChild(throttle)
+        
+//        button = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
+//        button.position = CGPoint(x:0, y: -170);
+//        button.zPosition = 35
+//        button.name = "up"
+//        self.addChild(button)
+//
+//        button = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
+//        button.position = CGPoint(x:0, y: -230);
+//        button.zPosition = 35
+//        button.name = "down"
+//        self.addChild(button)
         
         
         button = SKSpriteNode(color: .red, size: CGSize(width: 100, height: 100))
-        button.position = CGPoint(x:100, y: -200);
+        button.position = CGPoint(x: 600, y: -300);
         button.zPosition = 35
         button.name = "right"
         self.addChild(button)
         
         button = SKSpriteNode(color: .green, size: CGSize(width: 100, height: 100))
-        button.position = CGPoint(x:-100, y: -200);
+        button.position = CGPoint(x: 450, y: -300);
         button.zPosition = 35
         button.name = "left"
         
@@ -152,16 +190,14 @@ class SpaceScene: SKScene
         let touch = touches.first as UITouch?
         let touchLocation = touch?.location(in: self)
         let targetNode = atPoint(touchLocation!)
-        for press in touches
-        {
-            print("press: ", press)
-        }
+//        for press in touches
+//        {
+//            //print("press: ", press)
+//        }
         
         switch targetNode.name
         {
             case "up":
-                
-                
                 
                 print("pushing up")
                 // playerVelocity += 1//  .dy += 1
@@ -207,6 +243,11 @@ class SpaceScene: SKScene
                 pushingUp = false
                 pushingDown = false
             
+            case "throttle":
+                throttleTouched = true
+                print("touched trottle")
+    
+            
             default:
                 print("touches began - undefined")
                 break
@@ -214,9 +255,41 @@ class SpaceScene: SKScene
         
     }
     
+
+    
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)
     {
         
+        for touch in touches
+        {
+            //let touch = touches.first as UITouch?
+            let touchLocation = touch.location(in: self)
+            let targetNode = atPoint(touchLocation) as! SKNode
+            print("touch moved: ", targetNode.name)
+        
+            if throttleTouched && targetNode.name == "throttle" || targetNode.name == "throttleBar"
+        {
+            let touch = touches.first
+            let touchLocation = touch!.location(in: self)
+            let previousLocation = touch!.previousLocation(in: self)
+            var throttlePosition = touch!.location(in: self).y
+            
+            if throttlePosition < -300
+            {
+                throttlePosition = -300
+            }
+            
+            if throttlePosition > 150
+            {
+                throttlePosition = 150
+            }
+            
+            print("throttle position: ", throttlePosition)
+            throttle.position.y = throttlePosition  // touch?.location(in: self).y as! CGFloat
+            
+        }
+        }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)
@@ -224,31 +297,60 @@ class SpaceScene: SKScene
         
         print("touches count: ", touches.count)
         
-        let touch = touches.first as UITouch?
-        let touchLocation = touch?.location(in: self)
-        let targetNode = atPoint(touchLocation!)// as! SKSpriteNode
         
-        switch targetNode.name
-            
+        for touch in touches
         {
-            case "up":
-                print("let off up")
-                pushingUp = false
+            //let touch = touches.first as UITouch?
+            let touchLocation = touch.location(in: self)
+            let targetNode = atPoint(touchLocation) as! SKNode
             
-            case "down":
-                print("let off down")
-                pushingDown = false
+//            for press in touches
+//            {
+//                //print("press: ", press)
+//
+//                let touchEnded = atPoint(press.location(in: self))
+//                if touchEnded.name == "throttle"
+//                {
+//                    throttleTouched = false
+//                }
+//            }
+            // throttleTouched = false
             
-            case "left":
-                print("let off left")
-                pushingLeft = false
+            print("touch ended for:", targetNode.name)
             
-            case "right":
-                print("let off right")
-                pushingRight = false
-            
-            default:
-                print("let off undefined node")
+            switch targetNode.name
+                
+            {
+                
+                case "up":
+                    print("let off up")
+                    pushingUp = false
+                
+                case "down":
+                    print("let off down")
+                    pushingDown = false
+                
+                case "left":
+                    print("let off left")
+                    pushingLeft = false
+                
+                case "right":
+                    print("let off right")
+                    pushingRight = false
+                
+                case "throttle":
+                    print("let off throttle")
+                    
+                    throttleTouched = false
+                
+                case "throttleBar":
+                    print("let off throttle")
+                    
+                    throttleTouched = false
+                
+                default:
+                    print("let off undefined node")
+            }
         }
     }
     
@@ -277,31 +379,54 @@ class SpaceScene: SKScene
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?)
     {
         
-        let touch = touches.first as UITouch?
-        let touchLocation = touch?.location(in: self)
-        let targetNode = atPoint(touchLocation!) as! SKSpriteNode
         
-        switch targetNode.name
-            
+        for touch in touches
         {
-            case "up":
-                print("cancel up")
-                pushingUp = false
+            //let touch = touches.first as UITouch?
+            let touchLocation = touch.location(in: self)
+            let targetNode = atPoint(touchLocation) as! SKNode
             
-            case "down":
-                print("cancel down")
-                pushingDown = false
+            //        let touch = touches.first as UITouch?
+            //        let touchLocation = touch?.location(in: self)
+            //        let targetNode = atPoint(touchLocation!) as! SKSpriteNode
             
-            case "left":
-                print("cancel left")
-                pushingLeft = false
+            for press in touches
+            {
+                //print("press: ", press)
+                
+                let touchEnded = atPoint(press.location(in: self))
+                if touchEnded.name == "throttle"
+                {
+                    throttleTouched = false
+                }
+            }
             
-            case "right":
-                print("cancel right")
-                pushingRight = false
-            
-            default:
-                print("cancel undefined node")
+            switch targetNode.name
+                
+            {
+                case "up":
+                    print("cancel up")
+                    pushingUp = false
+                
+                case "down":
+                    print("cancel down")
+                    pushingDown = false
+                
+                case "left":
+                    print("cancel left")
+                    pushingLeft = false
+                
+                case "right":
+                    print("cancel right")
+                    pushingRight = false
+                
+                case "throttle":
+                    print("cancel throttle")
+                    throttleTouched = false
+                
+                default:
+                    print("cancel undefined node")
+            }
         }
     }
     
@@ -390,7 +515,7 @@ class SpaceScene: SKScene
             
             if pushingLeft
             {
-                playerAngleVelocity += 1
+                playerAngleVelocity += 0.5// 1
                 print("pushing left playerangleVelocity: ", playerAngleVelocity)
                 if playerAngleVelocity > angleMax
                 {
@@ -401,7 +526,7 @@ class SpaceScene: SKScene
             
             if pushingRight
             {
-                playerAngleVelocity -= 1
+                playerAngleVelocity -= 0.5 // 1
                 if playerAngleVelocity < -angleMax
                 {
                     playerAngleVelocity = -angleMax
@@ -420,6 +545,11 @@ class SpaceScene: SKScene
             {
                 // print("sign of player angle Velocity: ", CGFloat(Int(playerAngleVelocity).signum()))
                 playerAngleVelocity -= CGFloat(Int(playerAngleVelocity).signum())
+                
+                if abs(playerAngleVelocity) <= 0.5
+                {
+                    playerAngleVelocity = 0
+                }
             }
             
         }
@@ -474,6 +604,9 @@ class SpaceScene: SKScene
             counter = -20
             asteroid.run(movePlanet)
             
+            let moveNebula = SKAction.move(to: CGPoint(x: nebula.position.x + changeInX, y: nebula.position.y + changeInY), duration: 0.2)
+            nebula.run(moveNebula)
+            
             
             self.enumerateChildNodes(withName: "planet*", using: ({
                 (planet, error) in
@@ -482,16 +615,56 @@ class SpaceScene: SKScene
             }))
             
             
+            
+            
             let movePlayer = SKAction.move(to: CGPoint(x: player.position.x + changeInX, y: player.position.y + changeInY), duration: 0.2)
             player.run(movePlayer)
             
             
+        }
+        let throttleSpeed = ((throttle.position.y + 300) / 450) * 15
+        
+       // print("throttle speed: ", throttleSpeed)
+        
+        if throttleSpeed < playerVelocity
+        {
+            playerVelocity -= 0.1
+        }
+        
+        if throttleSpeed > playerVelocity
+        {
+            playerVelocity += 0.1
+        }
+        
+        if abs(throttleSpeed - playerVelocity) < 0.1
+        {
+            playerVelocity = throttleSpeed
         }
         
         
         player.zRotation = playerAngle * degreesToRadians
         
         player.position = CGPoint(x:player.position.x - sin(player.zRotation) * playerVelocity / 2.0,y:player.position.y + cos(player.zRotation) * playerVelocity / 2.0)
+        
+        //player.position = CGPoint(x:player.position.x - sin(player.zRotation) * throttleSpeed / 2.0,y:player.position.y + cos(player.zRotation) * throttleSpeed / 2.0)
+        
+        var flameSize = throttleSpeed * 4
+       // var flameSize = playerVelocity * 4
+        if flameSize > 30
+        {
+            flameSize = 30
+        }
+        
+        if flameSize < 0
+        {
+            flameSize = 0
+        }
+        
+//print("playerVelocity: ", playerVelocity)
+        
+        fireNode.position.x = player.position.x + flameSize * sin(player.zRotation)
+        fireNode.position.y = player.position.y - flameSize * cos(player.zRotation)
+        fireNode.zRotation = player.zRotation
         
         showActiveTouches()
         
