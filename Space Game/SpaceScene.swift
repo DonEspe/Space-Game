@@ -44,6 +44,8 @@ class SpaceScene: SKScene
     
     var throttle = SKNode()
     
+    var radarNode = SKNode()
+    
     let background = SKSpriteNode(imageNamed: "darkPurple")
     //let cameraNode = SKCameraNode()
     
@@ -71,12 +73,12 @@ class SpaceScene: SKScene
         
         asteroid.zPosition = 9
         asteroid.position = CGPoint(x: 100, y: -175)
-        asteroid.name = "asteroid"
+        asteroid.name = "radar: asteroid"
         addChild(asteroid)
         
         nebula.zPosition = 11
         nebula.position = CGPoint(x: -150, y: 600)
-        nebula.name = "nebula"
+        nebula.name = "radar: nebula"
         nebula.alpha = 0.2
         nebula.color = .blue
         nebula.colorBlendFactor = 0.7
@@ -86,6 +88,7 @@ class SpaceScene: SKScene
         makePlanet(at: CGPoint(x: -200.0,y: -175.0), ofRadius: 60, color: .brown)
         makePlanet(at: CGPoint(x: -300.0,y: 120), ofRadius: 35, color: .blue)
         makePlanet(at: CGPoint(x:100, y: 200), ofRadius: 75, color: .green)
+        makePlanet(at: CGPoint(x:1000, y:1000), ofRadius: 80, color: .purple)
         
         player = SKSpriteNode(imageNamed: "playerShip1_blue")
         player.setScale(0.4)
@@ -169,6 +172,11 @@ class SpaceScene: SKScene
 //        button.name = "down"
 //        self.addChild(button)
         
+        radarNode = SKSpriteNode(color: .blue, size: CGSize(width: 200, height: 200))
+        radarNode.position = CGPoint(x: 600, y: 300);
+        radarNode.zPosition = 35
+        radarNode.name = "radar"
+        self.addChild(radarNode)
         
         button = SKSpriteNode(color: .red, size: CGSize(width: 100, height: 100))
         button.position = CGPoint(x: 600, y: -300);
@@ -463,7 +471,7 @@ class SpaceScene: SKScene
         let circle = SKShapeNode(circleOfRadius: ofRadius ) // Size of Circle = Radius setting.
         circle.position = at  //touch location passed from touchesBegan.
         
-        circle.name = "planet " + String(planetCounter)
+        circle.name = "radar: planet " + String(planetCounter)
         circle.fillTexture = SKTexture(imageNamed: "gravel_dirt")
         circle.alpha = 0.6
         planetCounter += 1
@@ -475,13 +483,79 @@ class SpaceScene: SKScene
         
     }
     
+    func updateRadar()
+    {
+        self.enumerateChildNodes(withName: "radar image", using: ({(item, error) in
+            item.removeFromParent()
+        }))
+        
+        
+        
+        self.enumerateChildNodes(withName: "radar:*", using: ({(planet, error) in
+            let planetRadiusScaled = (planet.frame.width / 2) / 25
+            //print("planet radius: ", planetRadius)
+
+            let changeInX =  -(self.player.position.x / 2.0) + planet.position.x
+            let changeInY = -(self.player.position.y / 2.0) + planet.position.y
+            
+            let scaledX = (changeInX ) / (self.radarNode.frame.width / 2)
+            let scaledY = (changeInY ) / (self.radarNode.frame.height / 2)
+            
+            let circle = SKShapeNode(circleOfRadius: planetRadiusScaled ) // Size of Circle = Radius setting.
+            circle.position.x = scaledX * 2.5 + self.radarNode.position.x
+            circle.position.y = scaledY * 2.5 + self.radarNode.position.y
+            circle.strokeColor = .black
+            
+            circle.name = "radar image"
+           // circle.fillColor = planet.fillcolor
+            //circle.alpha = 0.6
+           // planetCounter += 1
+            // circle.strokeColor = SKColor.brown
+            // circle.glowWidth = 1.0
+            
+            if planet is SKShapeNode
+            {
+                circle.fillTexture = (planet as! SKShapeNode).fillTexture
+                circle.fillColor = (planet as! SKShapeNode).fillColor
+                circle.strokeColor = (planet as! SKShapeNode).fillColor
+            }
+            
+            circle.zPosition = 36
+            self.addChild(circle)
+            
+            
+ 
+        }))
+        
+//        player = SKSpriteNode(imageNamed: "playerShip1_blue")
+//        player.setScale(0.4)
+//        player.zPosition = 10
+        
+        let radarPlayer = SKSpriteNode(imageNamed: "playerShip1_blue")
+        radarPlayer.position = radarNode.position
+        radarPlayer.setScale(0.1)
+        radarPlayer.zPosition = 36
+        radarPlayer.zRotation = player.zRotation
+        radarPlayer.name = "radar image"
+        addChild(radarPlayer)
+        
+    }
+    
     //func landOnPlanet(name: String)
     func landOnPlanet(planet: SKShapeNode)
     {
         let gameScene = GameScene(fileNamed: "GameScene")!
         gameScene.size = CGSize(width: 1334, height: 750)
         gameScene.scaleMode = .aspectFit
-        gameScene.planetName =  planet.name ?? ""
+        var usePlanetName = planet.name
+        
+        if usePlanetName?.hasPrefix("radar:") != nil
+        {
+            usePlanetName = String(usePlanetName?.dropFirst(6) ?? "")
+        }
+        gameScene.planetName =  usePlanetName ?? ""
+        
+        
         
         let angle = atan2(self.player.position.x - planet.position.x, self.player.position.y - planet.position.y)
         
@@ -566,7 +640,7 @@ class SpaceScene: SKScene
         
         playerAngle += playerAngleVelocity
         
-        self.enumerateChildNodes(withName: "planet*", using: ({(planet, error) in
+        self.enumerateChildNodes(withName: "*planet*", using: ({(planet, error) in
             let planetRadius = planet.frame.width / 2
             //print("planet radius: ", planetRadius)
             let usePlayerSize = min(self.player.frame.height, self.player.frame.width)
@@ -608,7 +682,7 @@ class SpaceScene: SKScene
             nebula.run(moveNebula)
             
             
-            self.enumerateChildNodes(withName: "planet*", using: ({
+            self.enumerateChildNodes(withName: "*planet*", using: ({
                 (planet, error) in
                 let movePlanet = SKAction.move(to: CGPoint(x: planet.position.x + changeInX, y: planet.position.y + changeInY), duration: 0.2)
                 planet.run(movePlanet)
@@ -666,6 +740,7 @@ class SpaceScene: SKScene
         fireNode.position.y = player.position.y - flameSize * cos(player.zRotation)
         fireNode.zRotation = player.zRotation
         
+        updateRadar()
         showActiveTouches()
         
     }
