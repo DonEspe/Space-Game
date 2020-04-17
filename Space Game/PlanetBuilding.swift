@@ -8,7 +8,7 @@
 
 import Foundation
 
-let canJump = [Character(" "), "r", "p", "^", "B"]
+let canJump = [Character(" "), "r", "p", "^", "B", "O"]
 let blocked = [Character("d")]
 let cantFallThrough = [Character("."), "d", "S", "X"]
 
@@ -82,6 +82,11 @@ struct PlanetBuilding
                 if i == 3 && j == 1
                 {
                     planetMap[i][j] = "u"
+                }
+                
+                if i == 6 && j == 2
+                {
+                    planetMap[i][j] = "O"
                 }
                 
                 if i == 36 && j == 2

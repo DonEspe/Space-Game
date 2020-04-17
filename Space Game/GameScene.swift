@@ -42,7 +42,7 @@ class GameScene: SKScene {
     
     let tileScale = CGFloat(0.4)
     
-    var spriteList = [SKSpriteNode]()
+    var spriteList = [SKNode]()
     
     var button: SKNode! = nil
     
@@ -242,6 +242,20 @@ class GameScene: SKScene {
                    withKey: "PlayerWalkingInPlace")
     }
     
+    func addHome(x: Int, y: Int)
+    {
+        let home = SKShapeNode(circleOfRadius: 80)
+        home.zPosition = 10
+        home.position = CGPoint(x: x, y: (y - displaytileHeight) - 20)
+        home.name = "land: home"
+        home.fillColor = .gray
+       // home.alpha = 0.8
+        addChild(home)
+        spriteList.append(home)
+        
+    }
+    
+    
     func addLand(x: Int, y: Int, type: String)
     {
         let land = SKSpriteNode(imageNamed: type)
@@ -376,6 +390,9 @@ class GameScene: SKScene {
             
             case "!":
                 addLand(x: x, y: y, type: "wingMan1")
+            
+            case "O":
+                addHome(x: x, y: y)
             
             default:
                 print("undefined")

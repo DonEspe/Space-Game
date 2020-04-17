@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FE00A6AC24498013003AE534 /* HouseScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = FE00A6AB24498013003AE534 /* HouseScene.sks */; };
+		FE00A6AE2449802B003AE534 /* HouseScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE00A6AD2449802B003AE534 /* HouseScene.swift */; };
 		FE2F43372436B24A008C04E9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE2F43362436B24A008C04E9 /* AppDelegate.swift */; };
 		FE2F43392436B24A008C04E9 /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = FE2F43382436B24A008C04E9 /* GameScene.sks */; };
 		FE2F433B2436B24A008C04E9 /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = FE2F433A2436B24A008C04E9 /* Actions.sks */; };
@@ -59,6 +61,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FE00A6AB24498013003AE534 /* HouseScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = HouseScene.sks; sourceTree = "<group>"; };
+		FE00A6AD2449802B003AE534 /* HouseScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseScene.swift; sourceTree = "<group>"; };
 		FE2F43332436B24A008C04E9 /* Space Game.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Space Game.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FE2F43362436B24A008C04E9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		FE2F43382436B24A008C04E9 /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -184,9 +188,11 @@
 				FE2F43362436B24A008C04E9 /* AppDelegate.swift */,
 				FE2F43382436B24A008C04E9 /* GameScene.sks */,
 				FEE1C5DE243E5795008F828F /* SpaceScene.sks */,
+				FE00A6AB24498013003AE534 /* HouseScene.sks */,
 				FE2F433A2436B24A008C04E9 /* Actions.sks */,
 				FE2F433E2436B24A008C04E9 /* GameViewController.swift */,
 				FE2F433C2436B24A008C04E9 /* GameScene.swift */,
+				FE00A6AD2449802B003AE534 /* HouseScene.swift */,
 				FEE1C5CE243E541C008F828F /* SpaceScene.swift */,
 				FEE1C5C8243C1D75008F828F /* PlanetBuilding.swift */,
 				FE2F43402436B24A008C04E9 /* Main.storyboard */,
@@ -267,6 +273,7 @@
 				FE2F43622437AAEF008C04E9 /* gravel_stone.png in Resources */,
 				FEE1C5D2243E55C0008F828F /* ladder_mid.png in Resources */,
 				FE2F43552436B71C008C04E9 /* star1.png in Resources */,
+				FE00A6AC24498013003AE534 /* HouseScene.sks in Resources */,
 				FE2F43602437AA34008C04E9 /* ufoGreen.png in Resources */,
 				FEE1C5D7243E55DB008F828F /* liquidWater.png in Resources */,
 				FEE1C5C7243AA38F008F828F /* stoneHit1.mp3 in Resources */,
@@ -310,6 +317,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FE2F433D2436B24A008C04E9 /* GameScene.swift in Sources */,
+				FE00A6AE2449802B003AE534 /* HouseScene.swift in Sources */,
 				FE2F433F2436B24A008C04E9 /* GameViewController.swift in Sources */,
 				FE2F43372436B24A008C04E9 /* AppDelegate.swift in Sources */,
 				FEE1C5C9243C1D75008F828F /* PlanetBuilding.swift in Sources */,

@@ -172,9 +172,10 @@ class SpaceScene: SKScene
 //        button.name = "down"
 //        self.addChild(button)
         
-        radarNode = SKSpriteNode(color: .blue, size: CGSize(width: 200, height: 200))
+        radarNode = SKSpriteNode(color: .black, size: CGSize(width: 200, height: 200))
         radarNode.position = CGPoint(x: 600, y: 300);
         radarNode.zPosition = 35
+        radarNode.alpha = 0.7
         radarNode.name = "radar"
         self.addChild(radarNode)
         
