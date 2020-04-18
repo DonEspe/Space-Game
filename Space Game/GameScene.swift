@@ -10,6 +10,7 @@ import SpriteKit
 import GameplayKit
 
 var planetMap = Array(repeating: Array(repeating: Character("."), count: 20), count: 100)
+var planetMapTopLayer = Array(repeating: Array(repeating: Character(" "), count: 20), count: 100)
 var mapCenteredLocX = 15
 var mapCenteredLocY = 2
 var playerPosition = (x: 24, y: 2)
@@ -279,7 +280,7 @@ class GameScene: SKScene {
             // print("start Ship animation")
             let tiltRight = SKAction.rotate(byAngle: 0.1, duration: 0.25)
             let delay = SKAction.wait(forDuration: 0.05)
-            
+            land.zPosition = 11
             land.run(SKAction.repeatForever(SKAction.sequence([tiltRight, tiltRight.reversed(), delay, tiltRight.reversed(), tiltRight, delay])))
             
         }
@@ -345,6 +346,7 @@ class GameScene: SKScene {
                 var yPos = Int(yAdjust - Int(tile.size.height  ) * (j + 1))
                 yPos +=  (mapCenteredLocY - 3) * Int(tile.size.height)
                 addLandAtLoc(x: xPos, y: yPos, mapChar: planetMap[displayX][j])
+                addLandAtLoc(x: xPos, y: yPos, mapChar: planetMapTopLayer[displayX][j])
             }
             
         }
@@ -672,7 +674,7 @@ class GameScene: SKScene {
                // print("player rotation in landing: ", player.zRotation)
                 flying = false
                 onLand = true
-                planetMap[playerPosition.x][playerPosition.y] = "^"
+                planetMapTopLayer[playerPosition.x][playerPosition.y] = "^"
                 
                 player.texture = SKTexture(imageNamed: "p1_stand.png")
                 drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
@@ -748,16 +750,27 @@ class GameScene: SKScene {
             
             let currentCharacter = planetMap[Int(playerPosition.x)][Int(playerPosition.y)]
             
+            
+            
             if canJump.contains(currentCharacter) 
             {
                 
-                if planetMap[playerPosition.x][playerPosition.y] == "^"
+                
+                
+                if planetMap[playerPosition.x][playerPosition.y] == "^" || planetMapTopLayer[playerPosition.x][playerPosition.y] == "^"
                 {
                     print("enter ship")
                     flying = true
                     onLand = false
                     player.texture = SKTexture(imageNamed: "playerShip1_blue")
-                    planetMap[playerPosition.x][playerPosition.y] = " "
+                    if planetMap[playerPosition.x][playerPosition.y] == "^"
+                    {
+                        planetMap[playerPosition.x][playerPosition.y] = " "
+                    }
+                    if planetMapTopLayer[playerPosition.x][playerPosition.y] == "^"
+                    {
+                        planetMapTopLayer[playerPosition.x][playerPosition.y] = " "
+                    }
                     drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
                     placePlayer()
                     
@@ -766,11 +779,29 @@ class GameScene: SKScene {
                 {
                     if !flying
                     {
-                        let jump = SKAction.moveBy(x: 0.0, y: 20.0, duration: 0.25)
-                        let jumpTexture = SKTexture(imageNamed: "p1_jump")
-                        let land = SKAction.moveBy(x: 0.0, y: -20.0, duration: 0.25)
-                        jumpSound.play()
-                        player.run(.sequence([.setTexture(jumpTexture), jump, land]), completion: {self.player.texture = SKTexture(imageNamed: "p1_stand")})//,withKey: "jumping")
+                        if currentCharacter == "O"
+                        {
+                            print("enter house")
+                            
+                            let houseScene = SpaceScene(fileNamed: "HouseScene")!
+                            houseScene.size = CGSize(width: 1334, height: 750)
+                            houseScene.scaleMode = .aspectFit
+                            // spaceScene.planetLeft = planetName
+                            // spaceScene.planetLeftSize = planetCircumferance
+                            // spaceScene.planetLeftPosition = playerPosition.x
+                            //  spaceScene.anchorPoint = scene?.anchorPoint as! CGPoint //CGPoint(x: 0.5, y: 0.7)
+                            scene?.view?.presentScene(houseScene)
+                            
+                        }
+                            
+                        else
+                        {
+                            let jump = SKAction.moveBy(x: 0.0, y: 20.0, duration: 0.25)
+                            let jumpTexture = SKTexture(imageNamed: "p1_jump")
+                            let land = SKAction.moveBy(x: 0.0, y: -20.0, duration: 0.25)
+                            jumpSound.play()
+                            player.run(.sequence([.setTexture(jumpTexture), jump, land]), completion: {self.player.texture = SKTexture(imageNamed: "p1_stand")})//,withKey: "jumping")
+                        }
                     }
                 }
             }
