@@ -38,13 +38,15 @@ class SpaceScene: SKScene
     
     var planetCounter = 0
     
+    let radarRadius = CGFloat(100)
+    
     var asteroid = SKSpriteNode(imageNamed: "meteorBrown_big4")
     
     var nebula = SKSpriteNode(imageNamed: "nebula")
     
     var throttle = SKNode()
     
-    var radarNode = SKNode()
+    var radarNode = SKShapeNode()
     
     let background = SKSpriteNode(imageNamed: "darkPurple")
     //let cameraNode = SKCameraNode()
@@ -154,6 +156,12 @@ class SpaceScene: SKScene
         button.name = "throttleBar"
         self.addChild(button)
         
+        button = SKSpriteNode(color: .clear, size: CGSize(width: 100, height: 500))
+        button.position = CGPoint(x:-600, y: -75);
+        button.zPosition = 35
+        button.name = "throttleBar"
+        self.addChild(button)
+        
         throttle = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
         throttle.position = CGPoint(x:-600, y: -300);
         throttle.zPosition = 35
@@ -172,8 +180,12 @@ class SpaceScene: SKScene
 //        button.name = "down"
 //        self.addChild(button)
         
-        radarNode = SKSpriteNode(color: .black, size: CGSize(width: 200, height: 200))
-        radarNode.position = CGPoint(x: 600, y: 300);
+        radarNode = SKShapeNode(circleOfRadius: radarRadius )
+        
+        
+        //radarNode = SKSpriteNode(color: .black, size: CGSize(width: 200, height: 200))
+        radarNode.fillColor = .black
+        radarNode.position = CGPoint(x: 550, y: 250);
         radarNode.zPosition = 35
         radarNode.alpha = 0.7
         radarNode.name = "radar"
@@ -499,30 +511,47 @@ class SpaceScene: SKScene
             let changeInX =  -(self.player.position.x / 2.0) + planet.position.x
             let changeInY = -(self.player.position.y / 2.0) + planet.position.y
             
-            let scaledX = (changeInX ) / (self.radarNode.frame.width / 2)
-            let scaledY = (changeInY ) / (self.radarNode.frame.height / 2)
+           
             
-            let circle = SKShapeNode(circleOfRadius: planetRadiusScaled ) // Size of Circle = Radius setting.
-            circle.position.x = scaledX * 2.5 + self.radarNode.position.x
-            circle.position.y = scaledY * 2.5 + self.radarNode.position.y
-            circle.strokeColor = .black
             
-            circle.name = "radar image"
-           // circle.fillColor = planet.fillcolor
-            //circle.alpha = 0.6
-           // planetCounter += 1
-            // circle.strokeColor = SKColor.brown
-            // circle.glowWidth = 1.0
             
-            if planet is SKShapeNode
+                
+                let scaledX = (changeInX ) / (self.radarNode.frame.width / 2)
+                let scaledY = (changeInY ) / (self.radarNode.frame.height / 2)
+            
+        
+            
+                let circle = SKShapeNode(circleOfRadius: planetRadiusScaled ) // Size of Circle = Radius setting.
+                circle.position.x = scaledX * 2.5 + self.radarNode.position.x
+                circle.position.y = scaledY * 2.5 + self.radarNode.position.y
+                circle.strokeColor = .black
+                
+                circle.name = "radar image"
+                // circle.fillColor = planet.fillcolor
+                //circle.alpha = 0.6
+                // planetCounter += 1
+                // circle.strokeColor = SKColor.brown
+                // circle.glowWidth = 1.0
+                
+                if planet is SKShapeNode
+                {
+                    circle.fillTexture = (planet as! SKShapeNode).fillTexture
+                    circle.fillColor = (planet as! SKShapeNode).fillColor
+                    circle.strokeColor = (planet as! SKShapeNode).fillColor
+                }
+                
+                circle.zPosition = 36
+            
+            let xDistance =  self.radarNode.position.x - circle.position.x
+            let yDistance =  self.radarNode.position.y - circle.position.y
+            
+            let distance = sqrt(xDistance * xDistance + yDistance * yDistance)
+            
+            print("distance: ", distance)
+            if distance < self.radarRadius - circle.frame.width
             {
-                circle.fillTexture = (planet as! SKShapeNode).fillTexture
-                circle.fillColor = (planet as! SKShapeNode).fillColor
-                circle.strokeColor = (planet as! SKShapeNode).fillColor
+                self.addChild(circle)
             }
-            
-            circle.zPosition = 36
-            self.addChild(circle)
             
             
  
