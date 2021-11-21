@@ -185,7 +185,7 @@ class SpaceScene: SKScene
         
         //radarNode = SKSpriteNode(color: .black, size: CGSize(width: 200, height: 200))
         radarNode.fillColor = .black
-        radarNode.position = CGPoint(x: 550, y: 250);
+        radarNode.position = CGPoint(x: 550, y: 250  );
         radarNode.zPosition = 35
         radarNode.alpha = 0.7
         radarNode.name = "radar"
@@ -287,7 +287,7 @@ class SpaceScene: SKScene
             //let touch = touches.first as UITouch?
             let touchLocation = touch.location(in: self)
             let targetNode = atPoint(touchLocation) as! SKNode
-            print("touch moved: ", targetNode.name)
+            print("touch moved: ", targetNode.name!)
         
             if throttleTouched && targetNode.name == "throttle" || targetNode.name == "throttleBar"
         {
