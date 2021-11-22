@@ -9,8 +9,8 @@
 import SpriteKit
 import GameplayKit
 
-var planetMap = Array(repeating: Array(repeating: Character("."), count: 20), count: 100)
-var planetMapTopLayer = Array(repeating: Array(repeating: Character(" "), count: 20), count: 100)
+var planetMap = Array(repeating: Array(repeating: Character("."), count: 20), count: 200)
+var planetMapTopLayer = Array(repeating: Array(repeating: Character(" "), count: 20), count: 200)
 var mapCenteredLocX = 15
 var mapCenteredLocY = 2
 var playerPosition = (x: 24, y: 2)
@@ -35,7 +35,7 @@ class GameScene: SKScene {
     var onLand = true
     var flying = false
     
-    var planetCircumferance = 50
+    var planetCircumference = 50
     
     let jumpSound = Sound(name: "jumpSound", type: "mp3")
     let hitSound = Sound(name: "stoneHit1", type: "mp3")
@@ -66,23 +66,23 @@ class GameScene: SKScene {
         planetBlend = 0
         planetColor = .clear
         
-//        if planetName.contains("1")
-//        {
-//            print("planet 1")
-//           // planetColor = .cyan
-//            planetColor = landedFillColor
-//            planetBlend = 1//0.5
-//            flying = true
-//        }
-//
-//        if planetName.contains("0")
-//        {
-//            print("planet 0")
-//          //  planetColor = .red
-//            planetColor = landedFillColor
-//            planetBlend = 1
-//            flying = true
-//        }
+        //        if planetName.contains("1")
+        //        {
+        //            print("planet 1")
+        //           // planetColor = .cyan
+        //            planetColor = landedFillColor
+        //            planetBlend = 1//0.5
+        //            flying = true
+        //        }
+        //
+        //        if planetName.contains("0")
+        //        {
+        //            print("planet 0")
+        //          //  planetColor = .red
+        //            planetColor = landedFillColor
+        //            planetBlend = 1
+        //            flying = true
+        //        }
         
         if planetName.contains("planet")
         {
@@ -106,11 +106,11 @@ class GameScene: SKScene {
         }
         
         print("character roundingFactor: ", roundingFactor)
-        let playerXLoc = (Int(landingAngleLocation * CGFloat(planetCircumferance) + roundingFactor))
-  
+        let playerXLoc = (Int(landingAngleLocation * CGFloat(planetCircumference) + roundingFactor))
+        
         
         playerPosition.x =  adjustForWrap(x: playerXLoc)
-
+        
         let background = SKSpriteNode(imageNamed: "purple")
         if scene != nil
         {
@@ -122,9 +122,9 @@ class GameScene: SKScene {
         addChild(background)
         
         addStars()
-        planetBuilder.buildPlanetMap(planetCircumferance: planetCircumferance)
+        planetBuilder.buildPlanetMap(planetCircumferance: planetCircumference)
         drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
-       // planetBuilder.printMap()
+        // planetBuilder.printMap()
         
         buildUI()
         
@@ -173,7 +173,7 @@ class GameScene: SKScene {
         
         let distance =  CGFloat(distanceFromCenter(x: Int(playerPosition.x), y: Int(playerPosition.y)))
         
-        player.zRotation = -distance * (.pi / 3) / CGFloat(planetCircumferance)
+        player.zRotation = -distance * (.pi / 3) / CGFloat(planetCircumference)
         
     }
     
@@ -250,7 +250,7 @@ class GameScene: SKScene {
         home.position = CGPoint(x: x, y: (y - displaytileHeight) - 20)
         home.name = "land: home"
         home.fillColor = .gray
-       // home.alpha = 0.8
+        // home.alpha = 0.8
         addChild(home)
         spriteList.append(home)
         
@@ -271,6 +271,7 @@ class GameScene: SKScene {
         {
             // print("start Ufo animation")
             let tiltRight = SKAction.rotate(byAngle: 0.1, duration: 0.1)
+            land.color = .white
             
             land.run(SKAction.repeatForever(tiltRight))
             
@@ -278,9 +279,10 @@ class GameScene: SKScene {
         if type.contains("Ship")
         {
             // print("start Ship animation")
-            let tiltRight = SKAction.rotate(byAngle: 0.1, duration: 0.25)
+            let tiltRight = SKAction.rotate(byAngle: 0.1, duration: 0.5)
             let delay = SKAction.wait(forDuration: 0.05)
             land.zPosition = 11
+            land.color = .white
             land.run(SKAction.repeatForever(SKAction.sequence([tiltRight, tiltRight.reversed(), delay, tiltRight.reversed(), tiltRight, delay])))
             
         }
@@ -330,18 +332,18 @@ class GameScene: SKScene {
             displayX = mapCenteredLocX + i
             if displayX < 0
             {
-                displayX += planetCircumferance + 1
+                displayX += planetCircumference + 1
             }
             
-            if displayX > planetCircumferance
+            if displayX > planetCircumference
             {
-                displayX -= planetCircumferance + 1
+                displayX -= planetCircumference + 1
             }
             
             let yAdjust = -((abs(i) * 2) + ((i * i) / 4))
             let xPos = i * Int(tile.size.width )
             for j in 0...displaytileHeight
-                
+                    
             {
                 var yPos = Int(yAdjust - Int(tile.size.height  ) * (j + 1))
                 yPos +=  (mapCenteredLocY - 3) * Int(tile.size.height)
@@ -359,43 +361,43 @@ class GameScene: SKScene {
             case " ":
                 //print("blank")
                 break
-            
+                
             case "X":
                 //print("grass")
                 addLand(x: x, y: y, type: "dirt_grass")
-            
+                
             case "S":
                 //print("sand")
                 addLand(x: x, y: y, type: "dirt_sand")
-            
+                
             case ".":
                 // print("dirt")
                 addLand(x: x, y: y, type: "gravel_dirt")
-            
+                
             case "^":
                 addLand(x: x, y: y, type: "playerShip1_blue")
-            
+                
             case "u":
                 addLand(x: x, y: y, type: "ufoGreen.png")
-            
+                
             case "d":
                 addLand(x: x, y: y, type: "gravel_stone")
-            
+                
             case "B":
                 addLand(x: x, y: y, type: "fence_wood")
-            
+                
             case "r":
                 addLand(x: x, y: y, type: "rock")
-            
+                
             case "p":
                 addLand(x: x, y: y, type: "tile_grassPurpleLarge")
-            
+                
             case "!":
                 addLand(x: x, y: y, type: "wingMan1")
-            
+                
             case "O":
                 addHome(x: x, y: y)
-            
+                
             default:
                 print("undefined")
         }
@@ -426,12 +428,12 @@ class GameScene: SKScene {
         var adjustedX = x
         if adjustedX < 0
         {
-            adjustedX += planetCircumferance + 1
+            adjustedX += planetCircumference + 1
         }
         
-        if adjustedX > planetCircumferance
+        if adjustedX > planetCircumference
         {
-            adjustedX -= planetCircumferance + 1
+            adjustedX -= planetCircumference + 1
         }
         
         
@@ -521,8 +523,8 @@ class GameScene: SKScene {
     func distanceFromCenter(x: Int, y: Int) -> Int
     {
         let distance1 = abs(mapCenteredLocX - x)
-        let distance2 = abs(x - (planetCircumferance + 1)  - mapCenteredLocX)
-        let distance3 = abs(x + (planetCircumferance + 1) - mapCenteredLocX)
+        let distance2 = abs(x - (planetCircumference + 1)  - mapCenteredLocX)
+        let distance3 = abs(x + (planetCircumference + 1) - mapCenteredLocX)
         
         //  print("d1: ", distance1, ",d2: ", distance2, ",d3: ", distance3)
         var shortestDistance = min(distance1, distance2, distance3)
@@ -532,14 +534,14 @@ class GameScene: SKScene {
             shortestDistance = x - mapCenteredLocX
         }
         
-        if shortestDistance == abs(x - (planetCircumferance + 1) - mapCenteredLocX)
+        if shortestDistance == abs(x - (planetCircumference + 1) - mapCenteredLocX)
         {
-            shortestDistance = x - (planetCircumferance + 1) - mapCenteredLocX
+            shortestDistance = x - (planetCircumference + 1) - mapCenteredLocX
         }
         
-        if shortestDistance == abs(x + planetCircumferance + 1 - mapCenteredLocX)
+        if shortestDistance == abs(x + planetCircumference + 1 - mapCenteredLocX)
         {
-            shortestDistance = x + (planetCircumferance + 1) - mapCenteredLocX
+            shortestDistance = x + (planetCircumference + 1) - mapCenteredLocX
         }
         
         return shortestDistance
@@ -556,12 +558,12 @@ class GameScene: SKScene {
         
         if playerPosition.x < 0
         {
-            playerPosition.x += planetCircumferance + 1
+            playerPosition.x += planetCircumference + 1
         }
         
-        if playerPosition.x > planetCircumferance
+        if playerPosition.x > planetCircumference
         {
-            playerPosition.x -= planetCircumferance + 1
+            playerPosition.x -= planetCircumference + 1
         }
         
         player.xScale = abs(player.xScale) * CGFloat(tiles.signum())
@@ -583,7 +585,7 @@ class GameScene: SKScene {
                 }
                 else
                 {
-                    let movePlayerAction = SKAction.move(to: position, duration: 0.25)
+                    let movePlayerAction = SKAction.move(to: position, duration: 0.15)
                     player.run(movePlayerAction, withKey: "moving")
                 }
             }
@@ -602,14 +604,14 @@ class GameScene: SKScene {
         print("moving by: ", by)
         mapCenteredLocX += by
         
-        if mapCenteredLocX > planetCircumferance
+        if mapCenteredLocX > planetCircumference
         {
-            mapCenteredLocX -= planetCircumferance
+            mapCenteredLocX -= planetCircumference
         }
         
         if mapCenteredLocX < 0
         {
-            mapCenteredLocX += planetCircumferance
+            mapCenteredLocX += planetCircumference
         }
         
         drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
@@ -629,78 +631,81 @@ class GameScene: SKScene {
         
         let touch = touches.first as UITouch?
         let touchLocation = touch?.location(in: self)
-        let targetNode = atPoint(touchLocation!) as! SKSpriteNode
-        if flying && targetNode.name == "up" && (player.action(forKey: "moving") == nil)
+        if let targetNode = (atPoint(touchLocation!) as? SKSpriteNode)
         {
-            print("touches began: up")
-            playerPosition.y -= 1
-            if playerPosition.y < 0
+            if flying && targetNode.name == "up" && (player.action(forKey: "moving") == nil)
             {
-                playerPosition.y = 0
+                print("touches began: up")
+                playerPosition.y -= 1
+                if playerPosition.y < 0
+                {
+                    playerPosition.y = 0
+                    
+                    let spaceScene = SpaceScene(fileNamed: "SpaceScene")!
+                    spaceScene.size = CGSize(width: 1334, height: 750)
+                    spaceScene.scaleMode = .aspectFit
+                    spaceScene.planetLeft = planetName
+                    spaceScene.planetLeftSize = planetCircumference
+                    spaceScene.planetLeftPosition = playerPosition.x
+                    //  spaceScene.anchorPoint = scene?.anchorPoint as! CGPoint //CGPoint(x: 0.5, y: 0.7)
+                    scene?.view?.presentScene(spaceScene)
+                }
                 
-                let spaceScene = SpaceScene(fileNamed: "SpaceScene")!
-                spaceScene.size = CGSize(width: 1334, height: 750)
-                spaceScene.scaleMode = .aspectFit
-                spaceScene.planetLeft = planetName
-                spaceScene.planetLeftSize = planetCircumferance
-                spaceScene.planetLeftPosition = playerPosition.x
-              //  spaceScene.anchorPoint = scene?.anchorPoint as! CGPoint //CGPoint(x: 0.5, y: 0.7)
-                scene?.view?.presentScene(spaceScene)
+                let rotateAction = SKAction.rotate(toAngle: 0.0, duration: 0.15, shortestUnitArc: true)
+                player.run(rotateAction)
+                
+                if let position = findPositionofMapLocation(x: playerPosition.x, y: playerPosition.y)
+                {
+                    let movePlayerAction = SKAction.move(to: position, duration: 0.15)
+                    player.run(movePlayerAction, withKey: "moving")
+                }
             }
             
-           
-            
-            
-            let rotateAction = SKAction.rotate(toAngle: 0.0, duration: 0.15, shortestUnitArc: true)
-            player.run(rotateAction)
-            
-            if let position = findPositionofMapLocation(x: playerPosition.x, y: playerPosition.y)
+            if flying && targetNode.name == "down" && !downBegan && (player.action(forKey: "moving") == nil)
             {
-                let movePlayerAction = SKAction.move(to: position, duration: 0.25)
-                player.run(movePlayerAction, withKey: "moving")
+                print("touch began down")
+                downBegan = true
+                print("touches began: down")
+                if cantFallThrough.contains(planetMap[playerPosition.x][playerPosition.y + 1])
+                {
+                    print("landing")
+                    //player.removeAllActions()
+                    player.zRotation = 0
+                    // print("player rotation in landing: ", player.zRotation)
+                    flying = false
+                    onLand = true
+                    planetMapTopLayer[playerPosition.x][playerPosition.y] = "^"
+                    
+                    player.texture = SKTexture(imageNamed: "p1_stand.png")
+                    drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
+                    
+                    // placePlayer()
+                    return
+                }
+                
+                
+                playerPosition.y += 1
+                if playerPosition.y > displaytileHeight
+                {
+                    playerPosition.y = displaytileHeight
+                }
+                
+                let rotateAction = SKAction.rotate(toAngle: .pi, duration: 0.15, shortestUnitArc: true)
+                player.run(rotateAction)
+                
+                // player.zRotation = .pi
+                
+                if let position = findPositionofMapLocation(x: playerPosition.x, y: playerPosition.y)
+                {
+                    let movePlayerAction = SKAction.move(to: position, duration: 0.15)
+                    player.run(movePlayerAction, withKey: "moving")
+                }
+                
             }
         }
-        
-        if flying && targetNode.name == "down" && !downBegan && (player.action(forKey: "moving") == nil)
+        else
         {
-            print("touch began down")
-            downBegan = true
-            print("touches began: down")
-            if cantFallThrough.contains(planetMap[playerPosition.x][playerPosition.y + 1])
-            {
-                print("landing")
-                //player.removeAllActions()
-                player.zRotation = 0
-               // print("player rotation in landing: ", player.zRotation)
-                flying = false
-                onLand = true
-                planetMapTopLayer[playerPosition.x][playerPosition.y] = "^"
-                
-                player.texture = SKTexture(imageNamed: "p1_stand.png")
-                drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
-                
-               // placePlayer()
-                return
-            }
-            
-            
-            playerPosition.y += 1
-            if playerPosition.y > displaytileHeight
-            {
-                playerPosition.y = displaytileHeight
-            }
-            
-            let rotateAction = SKAction.rotate(toAngle: .pi, duration: 0.15, shortestUnitArc: true)
-            player.run(rotateAction)
-            
-            // player.zRotation = .pi
-            
-            if let position = findPositionofMapLocation(x: playerPosition.x, y: playerPosition.y)
-            {
-                let movePlayerAction = SKAction.move(to: position, duration: 0.25)
-                player.run(movePlayerAction, withKey: "moving")
-            }
-            
+            print("touch began on something that wasn't a spritekit node.")
         }
         
     }
@@ -714,153 +719,160 @@ class GameScene: SKScene {
     {
         let touch = touches.first as UITouch?
         let touchLocation = touch?.location(in: self)
-        let targetNode = atPoint(touchLocation!) as! SKSpriteNode
-        
-        if targetNode.name == "right"
-        {
-            moveRight()
-            print("tapped right!")
-        }
-        
-        if targetNode.name == "left"
+        if let targetNode = atPoint(touchLocation!) as? SKSpriteNode
         {
             
-            moveLeft()
-            print("tapped left!")
-        }
-        
-        if targetNode.name == "up" && player.action(forKey: "jumping") == nil && player.action(forKey: "moving") == nil
-        {
-            print("up")
-            
-            if flying
+            if targetNode.name == "right"
             {
-                return
-            }
-      
-            if blocked.contains(planetMap[Int(playerPosition.x)][Int(playerPosition.y - 1)])
-            {
-                let movePlayerAction = SKAction.move(by: CGVector(dx: 0.0, dy: 8.0), duration: 0.1)
-                player.run(.sequence([ movePlayerAction, movePlayerAction.reversed()]), withKey: "moving")
-                
-                hitSound.play()
-                print("blocked")
-                return
+                moveRight()
+                print("tapped right!")
             }
             
-            let currentCharacter = planetMap[Int(playerPosition.x)][Int(playerPosition.y)]
-            
-            
-            
-            if canJump.contains(currentCharacter) 
+            if targetNode.name == "left"
             {
                 
+                moveLeft()
+                print("tapped left!")
+            }
+            
+            if targetNode.name == "up" && player.action(forKey: "jumping") == nil && player.action(forKey: "moving") == nil
+            {
+                print("up")
                 
-                
-                if planetMap[playerPosition.x][playerPosition.y] == "^" || planetMapTopLayer[playerPosition.x][playerPosition.y] == "^"
+                if flying
                 {
-                    print("enter ship")
-                    flying = true
-                    onLand = false
-                    player.texture = SKTexture(imageNamed: "playerShip1_blue")
-                    if planetMap[playerPosition.x][playerPosition.y] == "^"
-                    {
-                        planetMap[playerPosition.x][playerPosition.y] = " "
-                    }
-                    if planetMapTopLayer[playerPosition.x][playerPosition.y] == "^"
-                    {
-                        planetMapTopLayer[playerPosition.x][playerPosition.y] = " "
-                    }
-                    drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
-                    placePlayer()
+                    return
+                }
+                
+                if blocked.contains(planetMap[Int(playerPosition.x)][Int(playerPosition.y - 1)])
+                {
+                    let movePlayerAction = SKAction.move(by: CGVector(dx: 0.0, dy: 8.0), duration: 0.1)
+                    player.run(.sequence([ movePlayerAction, movePlayerAction.reversed()]), withKey: "moving")
                     
+                    hitSound.play()
+                    print("blocked")
+                    return
+                }
+                
+                let currentCharacter = planetMap[Int(playerPosition.x)][Int(playerPosition.y)]
+                
+                
+                
+                if canJump.contains(currentCharacter)
+                {
+                    if planetMap[playerPosition.x][playerPosition.y] == "^" || planetMapTopLayer[playerPosition.x][playerPosition.y] == "^"
+                    {
+                        print("enter ship")
+                        flying = true
+                        onLand = false
+                        player.texture = SKTexture(imageNamed: "playerShip1_blue")
+                        if planetMap[playerPosition.x][playerPosition.y] == "^"
+                        {
+                            planetMap[playerPosition.x][playerPosition.y] = " "
+                        }
+                        if planetMapTopLayer[playerPosition.x][playerPosition.y] == "^"
+                        {
+                            planetMapTopLayer[playerPosition.x][playerPosition.y] = " "
+                        }
+                        drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
+                        placePlayer()
+                        
+                    }
+                    else
+                    {
+                        if !flying
+                        {
+                            if currentCharacter == "O"
+                            {
+                                print("enter house")
+                                
+                                let houseScene = SpaceScene(fileNamed: "HouseScene")!
+                                houseScene.size = CGSize(width: 1334, height: 750)
+                                houseScene.scaleMode = .aspectFit
+                                planetMapTopLayer = Array(repeating: Array(repeating: Character(" "), count: 20), count: 100)
+                                // spaceScene.planetLeft = planetName
+                                // spaceScene.planetLeftSize = planetCircumferance
+                                // spaceScene.planetLeftPosition = playerPosition.x
+                                //  spaceScene.anchorPoint = scene?.anchorPoint as! CGPoint //CGPoint(x: 0.5, y: 0.7)
+                                scene?.view?.presentScene(houseScene)
+                                
+                            }
+                            
+                            else
+                            {
+                                var gravityAdjust = CGFloat(80 - planetCircumference) * 1.5
+                                gravityAdjust = (gravityAdjust < -15) ? -15 : gravityAdjust
+                                print("planet Circumference: ", planetCircumference, "gravity adjust: ", gravityAdjust)
+                                let jump = SKAction.moveBy(x: 0.0, y: 20.0 + gravityAdjust, duration: 0.2)  //TODO: take planet size into account
+                                let jumpTexture = SKTexture(imageNamed: "p1_jump")
+                                let land = SKAction.moveBy(x: 0.0, y: -20 - gravityAdjust, duration: 0.2)
+                                jumpSound.play()
+                                player.run(.sequence([.setTexture(jumpTexture), jump, land]), completion: {self.player.texture = SKTexture(imageNamed: "p1_stand")})//,withKey: "jumping")
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    if !flying
-                    {
-                        if currentCharacter == "O"
-                        {
-                            print("enter house")
-                            
-                            let houseScene = SpaceScene(fileNamed: "HouseScene")!
-                            houseScene.size = CGSize(width: 1334, height: 750)
-                            houseScene.scaleMode = .aspectFit
-                            // spaceScene.planetLeft = planetName
-                            // spaceScene.planetLeftSize = planetCircumferance
-                            // spaceScene.planetLeftPosition = playerPosition.x
-                            //  spaceScene.anchorPoint = scene?.anchorPoint as! CGPoint //CGPoint(x: 0.5, y: 0.7)
-                            scene?.view?.presentScene(houseScene)
-                            
-                        }
-                            
-                        else
-                        {
-                            let jump = SKAction.moveBy(x: 0.0, y: 20.0, duration: 0.25)
-                            let jumpTexture = SKTexture(imageNamed: "p1_jump")
-                            let land = SKAction.moveBy(x: 0.0, y: -20.0, duration: 0.25)
-                            jumpSound.play()
-                            player.run(.sequence([.setTexture(jumpTexture), jump, land]), completion: {self.player.texture = SKTexture(imageNamed: "p1_stand")})//,withKey: "jumping")
-                        }
-                    }
+                    playerPosition.y -= 1
+                    animateWalkingPlayer()
                 }
             }
-            else
-            {
-                playerPosition.y -= 1
-                animateWalkingPlayer()
-            }
-        }
-        
-        
-        
-        if targetNode.name == "down" && !flying && !downBegan
-        {
             
-            moveDown()
             
-            print("tapped down!")
-        }
-        
-        if targetNode.name == "down" && downBegan
-        {
-            print("setting downBegan to false")
-            downBegan = false
-        }
-        
-        
-        if targetNode.name != nil  //clicked on a node that didn't already have a defined action
-        {
-            if (targetNode.name?.description.contains("dirt"))!
+            
+            if targetNode.name == "down" && !flying && !downBegan
             {
-                //  print("node name clicked: ", targetNode.name?.description)
-                targetNode.removeFromParent()
                 
-                let mapLocation = mapLocationPressed(x: targetNode.position.x, y: targetNode.position.y)
-                //  print("location clicked: ", mapLocation)
-                print("character at map location ", mapLocation," is: ", planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY])
-                planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY] = " " //"B"
+                moveDown()
                 
-                if canJump.contains(planetMap[Int(playerPosition.x)][Int(playerPosition.y) + 1]) && !flying
-                {
-                    counter = 0
-                    falling = true
-                    print("falling in touch...")
-                    moveDown()
-                }
-                drawPlanetCenteredAt(x: Int(playerPosition.x), y: Int(playerPosition.y))
+                print("tapped down!")
             }
-            else
+            
+            if targetNode.name == "down" && downBegan
             {
-                if (targetNode.name?.contains("land:"))!
+                print("setting downBegan to false")
+                downBegan = false
+            }
+            
+            
+            if targetNode.name != nil  //clicked on a node that didn't already have a defined action
+            {
+                if (targetNode.name?.description.contains("dirt"))!
                 {
+                    //  print("node name clicked: ", targetNode.name?.description)
+                    targetNode.removeFromParent()
                     
-                    // print("item is land:")
-                    let mapLocation = mapLocationPressed(x: targetNode.position.x, y: targetNode.position.y) // targetNode.position.x, y: targetNode.position.y)
+                    let mapLocation = mapLocationPressed(x: targetNode.position.x, y: targetNode.position.y)
+                    //  print("location clicked: ", mapLocation)
                     print("character at map location ", mapLocation," is: ", planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY])
+                    planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY] = " " //"B"
+                    
+                    if canJump.contains(planetMap[Int(playerPosition.x)][Int(playerPosition.y) + 1]) && !flying
+                    {
+                        counter = 0
+                        falling = true
+                        print("falling in touch...")
+                        moveDown()
+                    }
+                    drawPlanetCenteredAt(x: Int(playerPosition.x), y: Int(playerPosition.y))
                 }
-                
+                else
+                {
+                    if (targetNode.name?.contains("land:"))!
+                    {
+                        
+                        // print("item is land:")
+                        let mapLocation = mapLocationPressed(x: targetNode.position.x, y: targetNode.position.y) // targetNode.position.x, y: targetNode.position.y)
+                        print("character at map location ", mapLocation," is: ", planetMap[mapLocation.mapLocationX][mapLocation.mapLocationY])
+                    }
+                    
+                }
             }
+        }
+        else
+        {
+            print("touch ended on something that wasn't a spritekit node.")
         }
     }
     
@@ -872,8 +884,8 @@ class GameScene: SKScene {
         let position = findPositionofMapLocation(x: playerPosition.x, y: playerPosition.y)!
         if !flying
         {
-            let movePlayerAction = SKAction.move(to: position, duration: 0.25)
-            let animate = SKAction.animate(with: playerWalkingFrames, timePerFrame: 0.1, resize: false, restore: true)
+            let movePlayerAction = SKAction.move(to: position, duration: 0.15)
+            let animate = SKAction.animate(with: playerWalkingFrames, timePerFrame: 0.05, resize: false, restore: true)
             player.run(animate, withKey: "walking")
             player.run(.sequence([movePlayerAction, .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "moving")
             
@@ -960,7 +972,7 @@ class GameScene: SKScene {
         {
             if (player.action(forKey: "falling") == nil)
             {
-              
+                
                 if !flying
                 {
                     animateWalkingPlayer()
@@ -986,12 +998,12 @@ class GameScene: SKScene {
         
         if displayMin < 0
         {
-            displayMin += planetCircumferance + 1
+            displayMin += planetCircumference + 1
         }
         
-        if displayMax > planetCircumferance
+        if displayMax > planetCircumference
         {
-            displayMax -= planetCircumferance + 1
+            displayMax -= planetCircumference + 1
         }
         
         if displayMax < displayMin  && abs(adjustedDisplayX) > displaytileWidth / 2
@@ -999,12 +1011,12 @@ class GameScene: SKScene {
             
             if adjustedDisplayX < 0
             {
-                adjustedDisplayX += planetCircumferance + 1
+                adjustedDisplayX += planetCircumference + 1
             }
             
-            if adjustedDisplayX > planetCircumferance || x > displayMin
+            if adjustedDisplayX > planetCircumference || x > displayMin
             {
-                adjustedDisplayX -= planetCircumferance + 1
+                adjustedDisplayX -= planetCircumference + 1
             }
         }
         
@@ -1041,14 +1053,14 @@ class GameScene: SKScene {
         
         var useX = ( Int(mapCenteredLocX - Int(xAdjustment)))
         
-        while useX >= planetCircumferance
+        while useX >= planetCircumference
         {
-            useX -= (planetCircumferance + 1)
+            useX -= (planetCircumference + 1)
         }
         
         while useX < 0
         {
-            useX += planetCircumferance + 1
+            useX += planetCircumference + 1
         }
         
         let adjustedi = xAdjustment

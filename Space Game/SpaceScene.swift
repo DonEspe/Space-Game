@@ -91,6 +91,8 @@ class SpaceScene: SKScene
         makePlanet(at: CGPoint(x: -300.0,y: 120), ofRadius: 35, color: .blue)
         makePlanet(at: CGPoint(x:100, y: 200), ofRadius: 75, color: .green)
         makePlanet(at: CGPoint(x:1000, y:1000), ofRadius: 80, color: .purple)
+        makePlanet(at: CGPoint(x:200, y:500), ofRadius: 120, color: .cyan)
+        
         
         player = SKSpriteNode(imageNamed: "playerShip1_blue")
         player.setScale(0.4)
@@ -168,17 +170,17 @@ class SpaceScene: SKScene
         throttle.name = "throttle"
         self.addChild(throttle)
         
-//        button = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
-//        button.position = CGPoint(x:0, y: -170);
-//        button.zPosition = 35
-//        button.name = "up"
-//        self.addChild(button)
-//
-//        button = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
-//        button.position = CGPoint(x:0, y: -230);
-//        button.zPosition = 35
-//        button.name = "down"
-//        self.addChild(button)
+        //        button = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
+        //        button.position = CGPoint(x:0, y: -170);
+        //        button.zPosition = 35
+        //        button.name = "up"
+        //        self.addChild(button)
+        //
+        //        button = SKSpriteNode(color: .blue, size: CGSize(width: 50, height: 50))
+        //        button.position = CGPoint(x:0, y: -230);
+        //        button.zPosition = 35
+        //        button.name = "down"
+        //        self.addChild(button)
         
         radarNode = SKShapeNode(circleOfRadius: radarRadius )
         
@@ -211,10 +213,10 @@ class SpaceScene: SKScene
         let touch = touches.first as UITouch?
         let touchLocation = touch?.location(in: self)
         let targetNode = atPoint(touchLocation!)
-//        for press in touches
-//        {
-//            //print("press: ", press)
-//        }
+        //        for press in touches
+        //        {
+        //            //print("press: ", press)
+        //        }
         
         switch targetNode.name
         {
@@ -226,7 +228,7 @@ class SpaceScene: SKScene
                 pushingDown = false
                 pushingRight = false
                 pushingLeft = false
-            
+                
             case "down":
                 
                 print("pushing down")
@@ -235,7 +237,7 @@ class SpaceScene: SKScene
                 pushingUp = false
                 pushingRight = false
                 pushingLeft = false
-            
+                
             case "left":
                 
                 print("pushing left")
@@ -245,7 +247,7 @@ class SpaceScene: SKScene
                 pushingUp = false
                 pushingDown = false
                 pushingRight = false
-            
+                
             case "right":
                 
                 
@@ -256,19 +258,19 @@ class SpaceScene: SKScene
                 pushingLeft = false
                 pushingUp = false
                 pushingDown = false
-            
+                
             case "background":
                 
                 pushingRight = false
                 pushingLeft = false
                 pushingUp = false
                 pushingDown = false
-            
+                
             case "throttle":
                 throttleTouched = true
-                print("touched trottle")
-    
-            
+                print("touched throttle")
+                
+                
             default:
                 print("touches began - undefined")
                 break
@@ -276,7 +278,7 @@ class SpaceScene: SKScene
         
     }
     
-
+    
     
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)
@@ -286,30 +288,30 @@ class SpaceScene: SKScene
         {
             //let touch = touches.first as UITouch?
             let touchLocation = touch.location(in: self)
-            let targetNode = atPoint(touchLocation) as! SKNode
-            print("touch moved: ", targetNode.name!)
-        
-            if throttleTouched && targetNode.name == "throttle" || targetNode.name == "throttleBar"
-        {
-            let touch = touches.first
-            let touchLocation = touch!.location(in: self)
-            let previousLocation = touch!.previousLocation(in: self)
-            var throttlePosition = touch!.location(in: self).y
+            let targetNode = atPoint(touchLocation)
+            print("touch moved: ", targetNode.name ?? "Not named")
             
-            if throttlePosition < -300
+            if throttleTouched && targetNode.name == "throttle" || targetNode.name == "throttleBar"  //TODO: remove && and later to keep moving throttle even if finger slides off.
             {
-                throttlePosition = -300
+                let touch = touches.first
+               // let touchLocation = touch!.location(in: self)
+               // let previousLocation = touch!.previousLocation(in: self)
+                var throttlePosition = touch!.location(in: self).y
+                
+                if throttlePosition < -300
+                {
+                    throttlePosition = -300
+                }
+                
+                if throttlePosition > 150
+                {
+                    throttlePosition = 150
+                }
+                
+                print("throttle position: ", throttlePosition)
+                throttle.position.y = throttlePosition  // touch?.location(in: self).y as! CGFloat
+                
             }
-            
-            if throttlePosition > 150
-            {
-                throttlePosition = 150
-            }
-            
-            print("throttle position: ", throttlePosition)
-            throttle.position.y = throttlePosition  // touch?.location(in: self).y as! CGFloat
-            
-        }
         }
     }
     
@@ -323,52 +325,52 @@ class SpaceScene: SKScene
         {
             //let touch = touches.first as UITouch?
             let touchLocation = touch.location(in: self)
-            let targetNode = atPoint(touchLocation) as! SKNode
+            let targetNode = atPoint(touchLocation)
             
-//            for press in touches
-//            {
-//                //print("press: ", press)
-//
-//                let touchEnded = atPoint(press.location(in: self))
-//                if touchEnded.name == "throttle"
-//                {
-//                    throttleTouched = false
-//                }
-//            }
+            //            for press in touches
+            //            {
+            //                //print("press: ", press)
+            //
+            //                let touchEnded = atPoint(press.location(in: self))
+            //                if touchEnded.name == "throttle"
+            //                {
+            //                    throttleTouched = false
+            //                }
+            //            }
             // throttleTouched = false
             
-            print("touch ended for:", targetNode.name)
+            print("touch ended for:", targetNode.name as Any)
             
             switch targetNode.name
-                
+            
             {
-                
+                    
                 case "up":
                     print("let off up")
                     pushingUp = false
-                
+                    
                 case "down":
                     print("let off down")
                     pushingDown = false
-                
+                    
                 case "left":
                     print("let off left")
                     pushingLeft = false
-                
+                    
                 case "right":
                     print("let off right")
                     pushingRight = false
-                
+                    
                 case "throttle":
                     print("let off throttle")
                     
                     throttleTouched = false
-                
+                    
                 case "throttleBar":
                     print("let off throttle")
                     
                     throttleTouched = false
-                
+                    
                 default:
                     print("let off undefined node")
             }
@@ -383,15 +385,15 @@ class SpaceScene: SKScene
         }
         if pushingLeft
         {
-           // print("still pushing left")
+            // print("still pushing left")
         }
         if pushingUp
         {
-           // print("still pushing up")
+            // print("still pushing up")
         }
         if pushingDown
         {
-           // print("still pushing down")
+            // print("still pushing down")
         }
         
     }
@@ -405,7 +407,7 @@ class SpaceScene: SKScene
         {
             //let touch = touches.first as UITouch?
             let touchLocation = touch.location(in: self)
-            let targetNode = atPoint(touchLocation) as! SKNode
+            let targetNode = atPoint(touchLocation)
             
             //        let touch = touches.first as UITouch?
             //        let touchLocation = touch?.location(in: self)
@@ -423,28 +425,28 @@ class SpaceScene: SKScene
             }
             
             switch targetNode.name
-                
+            
             {
                 case "up":
                     print("cancel up")
                     pushingUp = false
-                
+                    
                 case "down":
                     print("cancel down")
                     pushingDown = false
-                
+                    
                 case "left":
                     print("cancel left")
                     pushingLeft = false
-                
+                    
                 case "right":
                     print("cancel right")
                     pushingRight = false
-                
+                    
                 case "throttle":
                     print("cancel throttle")
                     throttleTouched = false
-                
+                    
                 default:
                     print("cancel undefined node")
             }
@@ -507,59 +509,55 @@ class SpaceScene: SKScene
         self.enumerateChildNodes(withName: "radar:*", using: ({(planet, error) in
             let planetRadiusScaled = (planet.frame.width / 2) / 25
             //print("planet radius: ", planetRadius)
-
+            
             let changeInX =  -(self.player.position.x / 2.0) + planet.position.x
             let changeInY = -(self.player.position.y / 2.0) + planet.position.y
             
-           
+            
+            let scaledX = (changeInX ) / (self.radarNode.frame.width / 2)
+            let scaledY = (changeInY ) / (self.radarNode.frame.height / 2)
             
             
             
-                
-                let scaledX = (changeInX ) / (self.radarNode.frame.width / 2)
-                let scaledY = (changeInY ) / (self.radarNode.frame.height / 2)
+            let circle = SKShapeNode(circleOfRadius: planetRadiusScaled ) // Size of Circle = Radius setting.
+            circle.position.x = scaledX * 2.5 + self.radarNode.position.x
+            circle.position.y = scaledY * 2.5 + self.radarNode.position.y
+            circle.strokeColor = .black
             
-        
+            circle.name = "radar image"
+            // circle.fillColor = planet.fillcolor
+            //circle.alpha = 0.6
+            // planetCounter += 1
+            // circle.strokeColor = SKColor.brown
+            // circle.glowWidth = 1.0
             
-                let circle = SKShapeNode(circleOfRadius: planetRadiusScaled ) // Size of Circle = Radius setting.
-                circle.position.x = scaledX * 2.5 + self.radarNode.position.x
-                circle.position.y = scaledY * 2.5 + self.radarNode.position.y
-                circle.strokeColor = .black
-                
-                circle.name = "radar image"
-                // circle.fillColor = planet.fillcolor
-                //circle.alpha = 0.6
-                // planetCounter += 1
-                // circle.strokeColor = SKColor.brown
-                // circle.glowWidth = 1.0
-                
-                if planet is SKShapeNode
-                {
-                    circle.fillTexture = (planet as! SKShapeNode).fillTexture
-                    circle.fillColor = (planet as! SKShapeNode).fillColor
-                    circle.strokeColor = (planet as! SKShapeNode).fillColor
-                }
-                
-                circle.zPosition = 36
+            if planet is SKShapeNode
+            {
+                circle.fillTexture = (planet as! SKShapeNode).fillTexture
+                circle.fillColor = (planet as! SKShapeNode).fillColor
+                circle.strokeColor = (planet as! SKShapeNode).fillColor
+            }
+            
+            circle.zPosition = 36
             
             let xDistance =  self.radarNode.position.x - circle.position.x
             let yDistance =  self.radarNode.position.y - circle.position.y
             
             let distance = sqrt(xDistance * xDistance + yDistance * yDistance)
             
-            print("distance: ", distance)
+            //print("distance: ", distance)
             if distance < self.radarRadius - circle.frame.width
             {
                 self.addChild(circle)
             }
             
             
- 
+            
         }))
         
-//        player = SKSpriteNode(imageNamed: "playerShip1_blue")
-//        player.setScale(0.4)
-//        player.zPosition = 10
+        //        player = SKSpriteNode(imageNamed: "playerShip1_blue")
+        //        player.setScale(0.4)
+        //        player.zPosition = 10
         
         let radarPlayer = SKSpriteNode(imageNamed: "playerShip1_blue")
         radarPlayer.position = radarNode.position
@@ -589,6 +587,7 @@ class SpaceScene: SKScene
         
         let angle = atan2(self.player.position.x - planet.position.x, self.player.position.y - planet.position.y)
         
+        gameScene.planetCircumference = Int(planet.frame.height / 2)
         gameScene.landingAngle = angle
         gameScene.landedFillColor = planet.fillColor
         
@@ -681,8 +680,8 @@ class SpaceScene: SKScene
             
             let distanceFromPlanet = sqrt( changeInX * changeInX + changeInY * changeInY)
             
-           // if abs(self.player.position.x - planet.position.x) < planetSize && abs(self.player.position.y - planet.position.y) < planetSize
-                
+            // if abs(self.player.position.x - planet.position.x) < planetSize && abs(self.player.position.y - planet.position.y) < planetSize
+            
             if distanceFromPlanet < planetSize
             {
                 print("in planet - do stuff")
@@ -691,7 +690,7 @@ class SpaceScene: SKScene
                 self.landOnPlanet(planet: planet as! SKShapeNode)  //MARK: need to add back
             }
             
-          //  print("player size: ", self.player.frame.width,", ",self.player.frame.height)
+            //  print("player size: ", self.player.frame.width,", ",self.player.frame.height)
             
         }))
         
@@ -700,9 +699,9 @@ class SpaceScene: SKScene
         {
             counter = 0
             print("off screen - need to adjust view")
-        
-            let changeInX = -player.position.x / 2
-            let changeInY = -player.position.y / 2
+            
+            let changeInX = -player.position.x // / 2
+            let changeInY = -player.position.y// / 2
             
             let movePlanet = SKAction.move(to: CGPoint(x: asteroid.position.x + changeInX, y: asteroid.position.y + changeInY), duration: 0.2)
             counter = -20
@@ -728,7 +727,7 @@ class SpaceScene: SKScene
         }
         let throttleSpeed = ((throttle.position.y + 300) / 450) * 15
         
-       // print("throttle speed: ", throttleSpeed)
+        // print("throttle speed: ", throttleSpeed)
         
         if throttleSpeed < playerVelocity
         {
@@ -753,7 +752,7 @@ class SpaceScene: SKScene
         //player.position = CGPoint(x:player.position.x - sin(player.zRotation) * throttleSpeed / 2.0,y:player.position.y + cos(player.zRotation) * throttleSpeed / 2.0)
         
         var flameSize = throttleSpeed * 4
-       // var flameSize = playerVelocity * 4
+        // var flameSize = playerVelocity * 4
         if flameSize > 30
         {
             flameSize = 30
@@ -764,7 +763,7 @@ class SpaceScene: SKScene
             flameSize = 0
         }
         
-//print("playerVelocity: ", playerVelocity)
+        //print("playerVelocity: ", playerVelocity)
         
         fireNode.position.x = player.position.x + flameSize * sin(player.zRotation)
         fireNode.position.y = player.position.y - flameSize * cos(player.zRotation)
