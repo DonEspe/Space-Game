@@ -16,7 +16,7 @@ var mapCenteredLocY = 2
 var playerPosition = (x: 24, y: 2)
 
 let displaytileHeight = 15
-let displaytileWidth = 26 // will add one for center I believe
+let displayTileWidth = 26 // will add one for center I believe
 
 class GameScene: SKScene {
     
@@ -54,6 +54,8 @@ class GameScene: SKScene {
     var landingAngle = CGFloat(0)
     
     var landedFillColor = SKColor(ciColor: .white)
+    var movingLeft = false
+    var movingRight = false
     
     
     private var player = SKSpriteNode()
@@ -186,7 +188,7 @@ class GameScene: SKScene {
             
         }
         
-        if let position = findPositionofMapLocation(x: playerPosition.x , y: playerPosition.y)
+        if let position = findPositionOfMapLocation(x: playerPosition.x , y: playerPosition.y)
         {
             player.position.x = position.x
             player.position.y = position.y
@@ -327,7 +329,7 @@ class GameScene: SKScene {
         
         var displayX:Int
         
-        for i in -((displaytileWidth) / 2)...(displaytileWidth / 2)
+        for i in -((displayTileWidth) / 2)...(displayTileWidth / 2)
         {
             displayX = mapCenteredLocX + i
             if displayX < 0
@@ -569,12 +571,12 @@ class GameScene: SKScene {
         player.xScale = abs(player.xScale) * CGFloat(tiles.signum())
         rotatePlayer()
         
-        if  abs(distanceFromCenter(x: Int(playerPosition.x), y: Int(playerPosition.y))) > (displaytileWidth / 2) - 2
+        if  abs(distanceFromCenter(x: Int(playerPosition.x), y: Int(playerPosition.y))) > (displayTileWidth / 2) - 2
         {
             recentered = true
         }
         
-        if let position = findPositionofMapLocation(x: playerPosition.x, y: playerPosition.y)
+        if let position = findPositionOfMapLocation(x: playerPosition.x, y: playerPosition.y)
         {
             
             if !recentered && (player.action(forKey: "moving") == nil) && (player.action(forKey: "falling") == nil)
@@ -633,6 +635,19 @@ class GameScene: SKScene {
         let touchLocation = touch?.location(in: self)
         if let targetNode = (atPoint(touchLocation!) as? SKSpriteNode)
         {
+            
+            if targetNode.name == "right"
+            {
+                movingRight = true
+                print("start tap right!")
+            }
+            
+            if targetNode.name == "left"
+            {
+                movingLeft = true
+                print("start tap left!")
+            }
+            
             if flying && targetNode.name == "up" && (player.action(forKey: "moving") == nil)
             {
                 print("touches began: up")
@@ -654,7 +669,7 @@ class GameScene: SKScene {
                 let rotateAction = SKAction.rotate(toAngle: 0.0, duration: 0.15, shortestUnitArc: true)
                 player.run(rotateAction)
                 
-                if let position = findPositionofMapLocation(x: playerPosition.x, y: playerPosition.y)
+                if let position = findPositionOfMapLocation(x: playerPosition.x, y: playerPosition.y)
                 {
                     let movePlayerAction = SKAction.move(to: position, duration: 0.15)
                     player.run(movePlayerAction, withKey: "moving")
@@ -678,8 +693,7 @@ class GameScene: SKScene {
                     
                     player.texture = SKTexture(imageNamed: "p1_stand.png")
                     drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
-                    
-                    // placePlayer()
+        
                     return
                 }
                 
@@ -695,7 +709,7 @@ class GameScene: SKScene {
                 
                 // player.zRotation = .pi
                 
-                if let position = findPositionofMapLocation(x: playerPosition.x, y: playerPosition.y)
+                if let position = findPositionOfMapLocation(x: playerPosition.x, y: playerPosition.y)
                 {
                     let movePlayerAction = SKAction.move(to: position, duration: 0.15)
                     player.run(movePlayerAction, withKey: "moving")
@@ -712,6 +726,32 @@ class GameScene: SKScene {
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)
     {
+        let touch = touches.first as UITouch?
+        let touchLocation = touch?.location(in: self)
+        if let targetNode = atPoint(touchLocation!) as? SKSpriteNode
+        {
+            if movingLeft && targetNode.name != "left"
+            {
+                movingLeft = false
+            }
+            if movingRight && targetNode.name != "right"
+            {
+                movingRight = false
+            }
+            
+            if targetNode.name == "right"
+            {
+                movingRight = true
+                movingLeft = false
+            }
+            
+            if targetNode.name == "left"
+            {
+                movingLeft = true
+                movingRight = false
+            }
+        }
+        
         
     }
     
@@ -724,14 +764,15 @@ class GameScene: SKScene {
             
             if targetNode.name == "right"
             {
-                moveRight()
+                movingRight = false
+                //moveRight()
                 print("tapped right!")
             }
             
             if targetNode.name == "left"
             {
-                
-                moveLeft()
+                movingLeft = false
+                //moveLeft()
                 print("tapped left!")
             }
             
@@ -881,7 +922,7 @@ class GameScene: SKScene {
     {
         
         print("animating walking player called")
-        let position = findPositionofMapLocation(x: playerPosition.x, y: playerPosition.y)!
+        let position = findPositionOfMapLocation(x: playerPosition.x, y: playerPosition.y)!
         if !flying
         {
             let movePlayerAction = SKAction.move(to: position, duration: 0.15)
@@ -956,7 +997,7 @@ class GameScene: SKScene {
                 
                 playerPosition.y = y
                 
-                let usePosition = findPositionofMapLocation(x: playerPosition.x, y: y)!
+                let usePosition = findPositionOfMapLocation(x: playerPosition.x, y: y)!
                 
                 let movePlayerActionVertical = SKAction.move(to: usePosition, duration: (0.1 + Double(fallDistance) * 0.05))
                 let playSound = SKAction.run {self.hitSound.play()}
@@ -982,10 +1023,10 @@ class GameScene: SKScene {
         
     }
     
-    func findPositionofMapLocation(x: Int, y: Int) -> CGPoint? //(x: CGFloat, y: CGFloat)?
+    func findPositionOfMapLocation(x: Int, y: Int) -> CGPoint? //(x: CGFloat, y: CGFloat)?
     {
         
-        if distanceFromCenter(x: Int(x), y: Int(y)) > displaytileWidth / 2 || y > displaytileHeight || y < 0
+        if distanceFromCenter(x: Int(x), y: Int(y)) > displayTileWidth / 2 || y > displaytileHeight || y < 0
         {
             print("tile won't be displayed")
             return nil
@@ -993,8 +1034,8 @@ class GameScene: SKScene {
         
         var adjustedDisplayX = x - mapCenteredLocX
         
-        var displayMin = mapCenteredLocX - displaytileWidth / 2
-        var displayMax = mapCenteredLocX + displaytileWidth / 2
+        var displayMin = mapCenteredLocX - displayTileWidth / 2
+        var displayMax = mapCenteredLocX + displayTileWidth / 2
         
         if displayMin < 0
         {
@@ -1006,7 +1047,7 @@ class GameScene: SKScene {
             displayMax -= planetCircumference + 1
         }
         
-        if displayMax < displayMin  && abs(adjustedDisplayX) > displaytileWidth / 2
+        if displayMax < displayMin  && abs(adjustedDisplayX) > displayTileWidth / 2
         {
             
             if adjustedDisplayX < 0
@@ -1100,11 +1141,24 @@ class GameScene: SKScene {
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?)
     {
+        print("touch canceled")
+        movingLeft = false
+        movingRight = false
         
     }
     
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
+        
+        if movingLeft && !recentered
+        {
+            moveLeft()
+        }
+        
+        if movingRight && !recentered
+        {
+            moveRight()
+        }
         
         counter += 1
         
@@ -1143,8 +1197,7 @@ class GameScene: SKScene {
             mapCenteredLocY += moveBy
             drawPlanetCenteredAt(x: mapCenteredLocX, y: mapCenteredLocY)
             placePlayer()
-            
-            
+   
         }
         
         if canJump.contains(planetMap[playerPosition.x][playerPosition.y + 1]) && (player.action(forKey: "falling") == nil) && (player.action(forKey: "moving") == nil)
@@ -1158,6 +1211,7 @@ class GameScene: SKScene {
                 
             }
         }
+    
     }
 }
 
