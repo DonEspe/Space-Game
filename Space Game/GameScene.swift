@@ -466,7 +466,7 @@ class GameScene: SKScene {
             print("falling in left")
             falling = true
             moveDown()
-            // return
+            return
         }
         
         
@@ -483,7 +483,6 @@ class GameScene: SKScene {
     
     func moveRight()
     {
-        
         if flying
         {
             let rotateAction = SKAction.rotate(toAngle: -.pi / 2.0, duration: 0.15, shortestUnitArc: true)
@@ -503,7 +502,7 @@ class GameScene: SKScene {
             counter = 0
             falling = true
             moveDown()
-            // return
+            return
         }
         
         if blocked.contains(planetMap[adjustForWrap(x: Int(playerPosition.x + 1))][Int(playerPosition.y)])
@@ -950,7 +949,8 @@ class GameScene: SKScene {
     
     func moveDown()
     {
-        
+        movingLeft = false
+        movingRight = false
         if downBegan
         {
             return
@@ -976,13 +976,13 @@ class GameScene: SKScene {
         
         playerPosition.y += 1
         
-        if playerPosition.y > displaytileHeight //mapheight
+        if playerPosition.y > displaytileHeight
         {
             playerPosition.y = displaytileHeight
         }
         
         
-        let playerbounce = SKAction.move(by: CGVector(dx: 0.0, dy: 4.0), duration: 0.05)
+        let playerBounce = SKAction.move(by: CGVector(dx: 0.0, dy: 4.0), duration: 0.05)
         
         if falling && !flying
         {
@@ -1004,7 +1004,7 @@ class GameScene: SKScene {
                 //hitSound.play()
                 if !flying
                 {
-                    player.run(.sequence([delay, movePlayerActionVertical, playSound, playerbounce, playerbounce.reversed(), .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "falling")
+                    player.run(.sequence([delay, movePlayerActionVertical, playSound, playerBounce, playerBounce.reversed(), .run({self.playerMoveEnded()}), .setTexture(SKTexture(imageNamed:"p1_stand"))]), withKey: "falling")
                 }
                 
             }
@@ -1150,12 +1150,12 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
         // Called before each frame is rendered
         
-        if movingLeft && !recentered
+        if movingLeft && !recentered && (player.action(forKey: "falling") == nil)
         {
             moveLeft()
         }
         
-        if movingRight && !recentered
+        if movingRight && !recentered && (player.action(forKey: "falling") == nil)
         {
             moveRight()
         }
@@ -1208,7 +1208,6 @@ class GameScene: SKScene {
                 counter = 0
                 falling = true
                 moveDown()
-                
             }
         }
     
